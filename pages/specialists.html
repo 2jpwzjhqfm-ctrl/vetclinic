@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Наши специалисты — Happy Pet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Путь к CSS из папки pages -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='specialists.css') }}">
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+    <!-- ШАПКА -->
+    <header class="header">
+
+        <div class="logo">
+            <span class="logo-paw">✣</span>
+            <span>HAPPY PET</span>
+        </div>
+
+        <a href="index.html" class="home-link">
+            Главная
+        </a>
+
+    </header>
+
+
+    <!-- ГЛАВНЫЙ БЛОК -->
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <p class="small-title">
+                ВЕТЕРИНАРНАЯ КЛИНИКА HAPPY PET
+            </p>
+
+            <h1>
+                НАШИ<br>
+                <span>ВРАЧИ</span>
+            </h1>
+
+            <p class="hero-description">
+                Команда опытных специалистов, которые любят животных
+                и постоянно повышают свою квалификацию
+            </p>
+
+            <a href="contacts.html" class="blue-button">
+                Записаться на приём
+            </a>
+
+        </div>
+
+        <div class="hero-image">
+            <img
+                <img src="{{ url_for('static', filename='doctors-hero.jpg') }}" alt="...">
+                alt="Ветеринарный врач с собакой"
+            >
+        </div>
+
+    </section>
+
+
+    <!-- ВСТУПЛЕНИЕ -->
+    <section class="intro">
+
+        <p class="section-label">
+            HAPPY PET
+        </p>
+
+        <h2>
+            ПРОФЕССИОНАЛЫ<br>
+            СВОЕГО ДЕЛА
+        </h2>
+
+        <p class="intro-text">
+            В нашей клинике работают врачи с многолетним опытом.
+            Мы не только лечим питомцев, но и находим к ним подход,
+            помогая владельцам принимать правильные решения.
+        </p>
+
+    </section>
+
+
+    <!-- СПИСОК СПЕЦИАЛИСТОВ -->
+    <section class="doctors">
+
+        <article class="doctor-card">
+
+            <div class="doctor-image">
+                <img
+                    <img src="{{ url_for('static', filename='doctor1.jpg') }}" alt="...">
+                    alt="Анна Смирнова"
+                >
+            </div>
+
+            <div class="doctor-content">
+
+                <span class="doctor-spec">ТЕРАПЕВТ</span>
+
+                <h3>Анна Смирнова</h3>
+
+                <p>
+                    Стаж 12 лет. Специализируется на диагностике,
+                    лечении внутренних заболеваний и вакцинации.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="doctor-card">
+
+            <div class="doctor-image">
+                <img
+                    <img src="{{ url_for('static', filename='doctor2.jpg') }}" alt="...">
+                    alt="Иван Петров"
+                >
+            </div>
+
+            <div class="doctor-content">
+
+                <span class="doctor-spec">ХИРУРГ</span>
+
+                <h3>Иван Петров</h3>
+
+                <p>
+                    Стаж 15 лет. Проводит плановые и экстренные операции,
+                    специалист по травматологии.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="doctor-card">
+
+            <div class="doctor-image">
+                <img
+                    <img src="{{ url_for('static', filename='doctor3.jpg') }}" alt="...">
+                    alt="Елена Козлова"
+                >
+            </div>
+
+            <div class="doctor-content">
+
+                <span class="doctor-spec">ДЕРМАТОЛОГ</span>
+
+                <h3>Елена Козлова</h3>
+
+                <p>
+                    Стаж 8 лет. Занимается диагностикой и лечением
+                    кожных заболеваний, аллергий и дерматитов.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="doctor-card">
+
+            <div class="doctor-image">
+                <img
+                    <img src="{{ url_for('static', filename='doctor4.jpg') }}" alt="...">
+                    alt="Дмитрий Волков"
+                >
+            </div>
+
+            <div class="doctor-content">
+
+                <span class="doctor-spec">СТОМАТОЛОГ</span>
+
+                <h3>Дмитрий Волков</h3>
+
+                <p>
+                    Стаж 10 лет. Проводит профессиональную гигиену
+                    полости рта и лечит заболевания зубов и дёсен.
+                </p>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- ПОЧЕМУ МЫ -->
+    <section class="why-us">
+
+        <div class="why-image">
+            <img
+                <img src="{{ url_for('static', filename='doctors-team.jpg') }}" alt="...">
+                alt="Команда Happy Pet"
+            >
+        </div>
+
+        <div class="why-content">
+
+            <p class="section-label">
+                ПОЧЕМУ HAPPY PET
+            </p>
+
+            <h2>
+                ЗАБОТА,<br>
+                КОТОРОЙ МОЖНО<br>
+                ДОВЕРЯТЬ
+            </h2>
+
+            <div class="why-item">
+                <span>01</span>
+                <p>
+                    Каждый врач регулярно проходит курсы повышения квалификации.
+                </p>
+            </div>
+
+            <div class="why-item">
+                <span>02</span>
+                <p>
+                    Индивидуальный подход к каждому питомцу и его владельцу.
+                </p>
+            </div>
+
+            <div class="why-item">
+                <span>03</span>
+                <p>
+                    Современное оборудование для точной диагностики.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ЗАПИСЬ -->
+    <section class="appointment">
+
+        <p class="section-label">
+            HAPPY PET
+        </p>
+
+        <h2>
+            ЗАПИШИТЕСЬ<br>
+            НА ПРИЁМ
+        </h2>
+
+        <p>
+            Мы поможем подобрать удобное время
+            для посещения ветеринарного врача.
+        </p>
+
+        <a href="contacts.html" class="blue-button">
+            Записаться на приём
+        </a>
+
+    </section>
+
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+
+        <div class="footer-logo">
+            <span class="logo-paw">✣</span>
+            <span>HAPPY PET</span>
+        </div>
+
+        <p>
+            © 2026 Happy Pet. Ветеринарная клиника
+        </p>
+
+    </footer>
+
+</div>
+
+</body>
+</html>
