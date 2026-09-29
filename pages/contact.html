@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Контакты и адрес ветеринарной клиники Забота."
+  >
+
+  <title>Контакты — ветеринарная клиника Забота</title>
+
+  <style>
+    :root {
+      --blue: #0758c9;
+      --blue-dark: #06459f;
+      --cream: #fffaf0;
+      --cream-dark: #f4eddd;
+      --white: #ffffff;
+      --text: #25262a;
+      --muted: #6d6d70;
+      --line: #ddd8ce;
+      --footer: #073b83;
+      --shadow: 0 20px 60px rgba(28, 41, 61, 0.14);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 10% 15%,
+          rgba(255, 255, 255, 0.95),
+          transparent 30rem
+        ),
+        #edf1f7;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    address {
+      font-style: normal;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    /* Шапка */
+
+    .header {
+      background: var(--cream);
+    }
+
+    .header__inner {
+      display: flex;
+      min-height: 86px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--blue);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+    }
+
+    .logo__icon {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--white);
+      background: var(--blue);
+      font-size: 20px;
+      box-shadow: 0 7px 16px rgba(7, 88, 201, 0.24);
+    }
+
+    .header__nav {
+      display: flex;
+      gap: 32px;
+      margin-left: auto;
+      color: #4f5054;
+      font-size: 14px;
+    }
+
+    .header__nav a {
+      padding: 9px 0;
+      transition: color 0.2s ease;
+    }
+
+    .header__nav a:hover {
+      color: var(--blue);
+    }
+
+    .header__phone {
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* Общие стили */
+
+    .eyebrow {
+      margin-bottom: 17px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.23em;
+    }
+
+    h1,
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      line-height: 1.07;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin-bottom: 24px;
+      font-size: clamp(45px, 6.3vw, 80px);
+    }
+
+    h2 {
+      margin-bottom: 22px;
+      font-size: clamp(35px, 4.4vw, 58px);
+    }
+
+    h3 {
+      font-size: 21px;
+      font-weight: 600;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 25px;
+      border: 1px solid transparent;
+      border-radius: 28px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button--blue {
+      color: var(--white);
+      background: var(--blue);
+      box-shadow: 0 9px 20px rgba(7, 88, 201, 0.22);
+    }
+
+    .button--blue:hover {
+      background: var(--blue-dark);
+    }
+
+    .button--border {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: transparent;
+    }
+
+    .button--border:hover {
+      color: var(--white);
+      background: var(--blue);
+    }
+
+    /* Первый экран */
+
+    .hero {
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    .hero__inner {
+      display: grid;
+      min-height: 565px;
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: center;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      padding: 70px 0;
+    }
+
+    .hero__text {
+      max-width: 410px;
+      margin-bottom: 33px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero__visual {
+      position: relative;
+      min-height: 565px;
+      overflow: hidden;
+    }
+
+    .hero__circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(570px, 76vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #e5eefb;
+      transform: translate(-41%, -50%);
+    }
+
+    .hero__animal {
+      position: absolute;
+      right: 5%;
+      bottom: 0;
+      display: flex;
+      width: 75%;
+      height: 88%;
+      align-items: center;
+      justify-content: center;
+      border-radius: 49% 49% 0 0;
+      background: linear-gradient(145deg, #fffefb 0%, #eee5d4 100%);
+      box-shadow: 20px 7px 0 rgba(221, 210, 187, 0.36);
+      font-size: clamp(130px, 18vw, 245px);
+    }
+
+    .hero__badge {
+      position: absolute;
+      right: 0;
+      bottom: 76px;
+      display: flex;
+      width: 148px;
+      height: 148px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--blue);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.35;
+      text-align: center;
+      transform: rotate(8deg);
+    }
+
+    /* Контакты */
+
+    .contacts {
+      padding: 108px 0;
+      background: var(--white);
+    }
+
+    .section-title {
+      max-width: 610px;
+      margin-bottom: 48px;
+    }
+
+    .section-title > p:last-child {
+      max-width: 550px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .contacts__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .contact-card {
+      min-height: 270px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--cream);
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .contact-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-5px);
+    }
+
+    .contact-card__icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 24px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--blue);
+      font-size: 23px;
+    }
+
+    .contact-card h3 {
+      margin-bottom: 16px;
+    }
+
+    .contact-card address,
+    .contact-card__value {
+      display: block;
+      min-height: 54px;
+      margin-bottom: 12px;
+      color: var(--text);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .contact-card__value--email {
+      font-size: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-card p {
+      min-height: 44px;
+      margin-bottom: 19px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .contact-card__link {
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    /* Блок адреса */
+
+    .address {
+      padding: 110px 0;
+      background: var(--cream);
+    }
+
+    .address__inner {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: center;
+      gap: 85px;
+    }
+
+    .address__visual {
+      position: relative;
+      min-height: 455px;
+    }
+
+    .address__image {
+      display: flex;
+      width: min(430px, 100%);
+      aspect-ratio: 1;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 18px 18px 0 rgba(7, 88, 201, 0.13);
+      font-size: 175px;
+    }
+
+    .address__star {
+      position: absolute;
+      color: var(--blue);
+      font-size: 50px;
+    }
+
+    .address__star--one {
+      top: 14px;
+      right: 13%;
+      transform: rotate(20deg);
+    }
+
+    .address__star--two {
+      right: 4%;
+      bottom: 70px;
+      transform: rotate(-20deg);
+    }
+
+    .address__description {
+      max-width: 520px;
+      margin-bottom: 31px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .address__details {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 32px;
+    }
+
+    .address__detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .address__detail-icon {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--blue);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .address__detail strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .address__detail p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    /* Карта и маршруты */
+
+    .map-section {
+      padding: 108px 0;
+      background: var(--white);
+    }
+
+    .section-title--center {
+      max-width: 680px;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+    }
+
+    .section-title--center > p:last-child {
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .map-layout {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 24px;
+    }
+
+    .route-card {
+      padding: 38px;
+      border-radius: var(--radius);
+      background: var(--cream);
+    }
+
+    .route-card__label {
+      margin-bottom: 14px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+
+    .route-card h3 {
+      margin-bottom: 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 33px;
+      font-weight: 400;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .route-card__address {
+      margin-bottom: 28px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .route-card__buttons {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .route-button {
+      display: flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .route-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .route-button--yandex {
+      background: #e6382b;
+    }
+
+    .route-button--google {
+      background: #4285f4;
+    }
+
+    .route-button--phone {
+      background: var(--blue);
+    }
+
+    .route-card__note {
+      display: flex;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .route-card__note span {
+      display: grid;
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .map-box {
+      position: relative;
+      min-height: 440px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .map {
+      width: 100%;
+      height: 440px;
+      border: 0;
+    }
+
+    .map-box__marker {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      width: 58px;
+      height: 58px;
+      place-items: center;
+      border: 5px solid var(--white);
+      border-radius: 50% 50% 50% 0;
+      color: var(--white);
+      background: var(--blue);
+      box-shadow: 0 7px 17px rgba(0, 0, 0, 0.25);
+      font-size: 23px;
+      transform: translate(-50%, -72%) rotate(-45deg);
+    }
+
+    .map-box__marker::after {
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(7, 88, 201, 0.2);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .map-box__marker {
+      z-index: 2;
+      line-height: 1;
+      cursor: default;
+    }
+
+    /* Синий блок связи */
+
+    .call-section {
+      color: var(--white);
+      background: var(--blue);
+    }
+
+    .call-section__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 55px;
+      padding: 88px 0;
+    }
+
+    .eyebrow--light {
+      color: #bdd5ff;
+    }
+
+    .call-section h2 {
+      margin-bottom: 17px;
+    }
+
+    .call-section p:not(.eyebrow) {
+      max-width: 460px;
+      margin-bottom: 0;
+      color: #d7e4ff;
+      line-height: 1.65;
+    }
+
+    .call-section__buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .button--white {
+      color: var(--blue);
+      background: var(--white);
+    }
+
+    .button--transparent {
+      border-color: rgba(255, 255, 255, 0.7);
+      color: var(--white);
+      background: transparent;
+    }
+
+    .button--transparent:hover {
+      color: var(--blue);
+      background: var(--white);
+    }
+
+    /* Подвал */
+
+    .footer {
+      color: #bcd0f1;
+      background: var(--footer);
+    }
+
+    .footer__inner {
+      display: flex;
+      min-height: 110px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .logo--footer {
+      color: var(--white);
+    }
+
+    .footer p,
+    .footer a {
+      margin-bottom: 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer__phone {
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .footer__copyright {
+      color: #91aed8;
+    }
+
+    /* Планшеты */
+
+    @media (max-width: 900px) {
+      .hero__inner,
+      .address__inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero__content {
+        padding-bottom: 20px;
+      }
+
+      .hero__visual {
+        min-height: 430px;
+      }
+
+      .contacts__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-card {
+        min-height: auto;
+      }
+
+      .address__inner {
+        gap: 48px;
+      }
+
+      .address__visual {
+        min-height: auto;
+      }
+
+      .address__image {
+        margin: 0 auto;
+      }
+
+      .map-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .call-section__inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .call-section__buttons {
+        justify-content: flex-start;
+      }
+
+      .footer__inner {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 30px 0;
+      }
+    }
+
+    /* Телефоны */
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 32px, 1180px);
+      }
+
+      .header__inner {
+        min-height: 72px;
+      }
+
+      .logo__name {
+        display: none;
+      }
+
+      .header__nav {
+        gap: 14px;
+        font-size: 12px;
+      }
+
+      .header__phone {
+        display: none;
+      }
+
+      h1 {
+        font-size: 46px;
+      }
+
+      h2 {
+        font-size: 37px;
+      }
+
+      .hero__content {
+        padding-top: 58px;
+      }
+
+      .hero__visual {
+        min-height: 340px;
+      }
+
+      .hero__circle {
+        width: 400px;
+      }
+
+      .hero__animal {
+        width: 75%;
+        height: 80%;
+        font-size: 130px;
+      }
+
+      .hero__badge {
+        right: 2%;
+        bottom: 36px;
+        width: 111px;
+        height: 111px;
+        font-size: 12px;
+      }
+
+      .contacts,
+      .address,
+      .map-section {
+        padding: 70px 0;
+      }
+
+      .section-title {
+        margin-bottom: 34px;
+      }
+
+      .contact-card {
+        padding: 25px;
+      }
+
+      .address__image {
+        width: 83%;
+        font-size: 125px;
+      }
+
+      .address__star {
+        font-size: 38px;
+      }
+
+      .route-card {
+        padding: 27px;
+      }
+
+      .map-box,
+      .map {
+        min-height: 350px;
+        height: 350px;
+      }
+
+      .call-section__inner {
+        padding: 66px 0;
+      }
+
+      .call-section__buttons {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .call-section__buttons .button {
+        width: 100%;
+      }
+
+      .footer__inner {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        gap: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="container header__inner">
+
+      <a class="logo" href="#top" aria-label="Ветеринарная клиника Забота">
+        <span class="logo__icon">🐾</span>
+        <span class="logo__name">ЗАБОТА</span>
+      </a>
+
+      <nav class="header__nav" aria-label="Навигация">
+        <a href="#contacts">Контакты</a>
+        <a href="#address">Адрес</a>
+        <a href="#map">Маршрут</a>
+      </nav>
+
+      <a class="header__phone" href="tel:+79011232233">
+        +7 (901) 123-22-33
+      </a>
+
+    </div>
+  </header>
+
+  <main id="top">
+
+    <section class="hero">
+      <div class="container hero__inner">
+
+        <div class="hero__content">
+          <p class="eyebrow">ВЕТЕРИНАРНАЯ КЛИНИКА</p>
+
+          <h1>
+            Контакты<br>
+            и адреса
+          </h1>
+
+          <p class="hero__text">
+            Ветеринарная клиника «Забота» всегда рядом,
+            когда вашему питомцу нужна помощь, внимание
+            и профессиональный уход.
+          </p>
+
+          <div class="hero__actions">
+            <a class="button button--blue" href="tel:+79011232233">
+              Позвонить в клинику
+            </a>
+
+            <a class="button button--border" href="#map">
+              Построить маршрут
+            </a>
+          </div>
+        </div>
+
+        <div class="hero__visual" aria-hidden="true">
+          <div class="hero__circle"></div>
+
+          <div class="hero__animal">
+            🐶
+          </div>
+
+          <div class="hero__badge">
+            Работаем<br>
+            круглосуточно
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="contacts" id="contacts">
+      <div class="container">
+
+        <div class="section-title">
+          <p class="eyebrow">СВЯЗАТЬСЯ С НАМИ</p>
+
+          <h2>
+            Контакты<br>
+            клиники
+          </h2>
+
+          <p>
+            Выберите удобный способ связи или приезжайте
+            в ветеринарную клинику «Забота».
+          </p>
+        </div>
+
+        <div class="contacts__grid">
+
+          <article class="contact-card">
+            <div class="contact-card__icon">⌖</div>
+
+            <h3>Адрес</h3>
+
+            <address>
+              Москва,<br>
+              Степная улица, 60
+            </address>
+
+            <a class="contact-card__link" href="#map">
+              Открыть карту
+            </a>
+          </article>
+
+          <article class="contact-card">
+            <div class="contact-card__icon">☎</div>
+
+            <h3>Телефон</h3>
+
+            <a class="contact-card__value" href="tel:+79011232233">
+              +7 (901) 123-22-33
+            </a>
+
+            <p>
+              Круглосуточно,<br>
+              без выходных
+            </p>
+
+            <a class="contact-card__link" href="tel:+79011232233">
+              Позвонить
+            </a>
+          </article>
+
+          <article class="contact-card">
+            <div class="contact-card__icon">✉</div>
+
+            <h3>Электронная почта</h3>
+
+            <a
+              class="contact-card__value contact-card__value--email"
+              href="mailto:zabota.vet@example.com"
+            >
+              zabota.vet@example.com
+            </a>
+
+            <p>
+              Отвечаем на письма<br>
+              каждый день
+            </p>
+
+            <a
+              class="contact-card__link"
+              href="mailto:zabota.vet@example.com"
+            >
+              Написать письмо
+            </a>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="address" id="address">
+      <div class="container address__inner">
+
+        <div class="address__visual" aria-hidden="true">
+          <div class="address__image">
+            🐱
+          </div>
+
+          <span class="address__star address__star--one">✦</span>
+          <span class="address__star address__star--two">✦</span>
+        </div>
+
+        <div class="address__content">
+          <p class="eyebrow">КАК НАС НАЙТИ</p>
+
+          <h2>
+            Приезжайте<br>
+            в «Заботу»
+          </h2>
+
+          <p class="address__description">
+            Клиника находится в Москве по адресу:
+            Степная улица, 60. Мы принимаем животных
+            ежедневно и круглосуточно.
+          </p>
+
+          <div class="address__details">
+
+            <div class="address__detail">
+              <span class="address__detail-icon">⌖</span>
+
+              <div>
+                <strong>Адрес</strong>
+                <p>Москва, Степная улица, 60</p>
+              </div>
+            </div>
+
+            <div class="address__detail">
+              <span class="address__detail-icon">◷</span>
+
+              <div>
+                <strong>Режим работы</strong>
+                <p>Круглосуточно, без выходных</p>
+              </div>
+            </div>
+
+            <div class="address__detail">
+              <span class="address__detail-icon">P</span>
+
+              <div>
+                <strong>Парковка</strong>
+                <p>Бесплатная парковка для посетителей</p>
+              </div>
+            </div>
+
+          </div>
+
+          <a class="button button--blue" href="#map">
+            Смотреть на карте
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="map-section" id="map">
+      <div class="container">
+
+        <div class="section-title section-title--center">
+          <p class="eyebrow">МАРШРУТ</p>
+
+          <h2>Постройте маршрут</h2>
+
+          <p>
+            Выберите удобный сервис навигации,
+            чтобы добраться до клиники.
+          </p>
+        </div>
+
+        <div class="map-layout">
+
+          <div class="route-card">
+            <p class="route-card__label">ВЕТЕРИНАРНАЯ КЛИНИКА</p>
+
+            <h3>Забота</h3>
+
+            <p class="route-card__address">
+              Москва, Степная улица, 60
+            </p>
+
+            <div class="route-card__buttons">
+              <a
+                class="route-button route-button--yandex"
+                href="https://yandex.ru/maps/?rtext=~55.7558,37.6173"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Яндекс Карты
+              </a>
+
+              <a
+                class="route-button route-button--google"
+                href="https://www.google.com/maps/dir/?api=1&destination=Москва,+Степная+улица,+60"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google Maps
+              </a>
+
+              <a class="route-button route-button--phone" href="tel:+79011232233">
+                Позвонить перед визитом
+              </a>
+            </div>
+
+            <div class="route-card__note">
+              <span>ℹ</span>
+              Перед поездкой позвоните нам — мы подскажем,
+              как подготовить питомца к приёму.
+            </div>
+          </div>
+
+          <div class="map-box">
+            <iframe
+              class="map"
+              title="Карта с расположением ветеринарной клиники Забота"
+              src="https://yandex.ru/map-widget/v1/?ll=37.6173%2C55.7558&z=15&pt=37.6173%2C55.7558%2Cpm2rdm"
+              loading="lazy"
+              allowfullscreen
+            ></iframe>
+
+            <div class="map-box__marker" aria-hidden="true">
+              🐾
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="call-section">
+      <div class="container call-section__inner">
+
+        <div>
+          <p class="eyebrow eyebrow--light">НУЖНА ПОМОЩЬ?</p>
+
+          <h2>
+            Мы всегда<br>
+            на связи
+          </h2>
+
+          <p>
+            Позвоните в клинику «Забота».
+            Мы ответим на вопросы и поможем записаться на приём.
+          </p>
+        </div>
+
+        <div class="call-section__buttons">
+          <a class="button button--white" href="tel:+79011232233">
+            +7 (901) 123-22-33
+          </a>
+
+          <a
+            class="button button--transparent"
+            href="mailto:zabota.vet@example.com"
+          >
+            Написать на почту
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+
+      <a class="logo logo--footer" href="#top">
+        <span class="logo__icon">🐾</span>
+        <span class="logo__name">ЗАБОТА</span>
+      </a>
+
+      <p>
+        Ветеринарная клиника «Забота»<br>
+        Москва, Степная улица, 60
+      </p>
+
+      <a class="footer__phone" href="tel:+79011232233">
+        +7 (901) 123-22-33
+      </a>
+
+      <p class="footer__copyright">
+        © 2026 «Забота»
+      </p>
+
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const targetId = link.getAttribute("href");
+
+        if (targetId === "#") {
+          return;
+        }
+
+        const target = document.querySelector(targetId);
+
+        if (target) {
+          event.preventDefault();
+
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
