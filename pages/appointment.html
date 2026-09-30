@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись на прием — Happy Pet</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- ЛОКАЛЬНЫЕ СТИЛИ ТОЛЬКО ДЛЯ СТРАНИЦЫ ЗАПИСИ --- */
+        
+        /* 1. Бежевый фон всей страницы */
+        body {
+            background-color: #fffdf5; 
+        }
+
+        /* Контейнер для центрирования контента по вертикали и горизонтали */
+        .content-wrapper {
+            flex: 1;
+            padding-top: 60px;
+            padding-bottom: 40px;
+            display: flex;
+            justify-content: center; /* Центрируем форму по горизонтали */
+        }
+
+        /* Белая карточка формы */
+        .appointment-form-wrapper {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Легкая тень */
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Заголовок формы */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 100;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Поля ввода */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            background-color: #fafafa; /* Светло-серый фон по умолчанию */
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background-color: #fff; /* Белый фон при фокусе */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Сетка для двух колонок (Имя / Телефон) */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* Кнопка отправки */
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+        }
+
+        /* Адаптив для мобильных устройств */
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .appointment-form-wrapper {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">Happy Pet</a>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="services.html">Услуги</a>
+                <a href="about.html">О клинике</a>
+                <a href="contacts.html">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="content-wrapper">
+        <div class="appointment-form-wrapper">
+            <h1>Запись на прием</h1>
+            <p class="subtitle">Заполните форму, и мы свяжемся с вами для подтверждения времени визита.</p>
+
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="pet-name">Имя питомца</label>
+                    <input type="text" id="pet-name" class="form-control" placeholder="Например: Барсик" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pet-type">Вид и порода</label>
+                    <input type="text" id="pet-type" class="form-control" placeholder="Например: Кошка, Британская" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="owner-name">Ваше имя</label>
+                        <input type="text" id="owner-name" class="form-control" placeholder="Иван Иванов" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="+7 (999) 000-00-00" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reason">Причина обращения / Симптомы</label>
+                    <textarea id="reason" class="form-control" rows="4" placeholder="Кратко опишите состояние питомца..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="preferred-time">Предпочтительное время приема</label>
+                    <select id="preferred-time" class="form-control">
+                        <option value="">Выберите время</option>
+                        <option value="09:00">09:00 - 11:00</option>
+                        <option value="11:00">11:00 - 13:00</option>
+                        <option value="13:00">13:00 - 15:00</option>
+                        <option value="15:00">15:00 - 17:00</option>
+                        <option value="17:00">17:00 - 19:00</option>
+                        <option value="19:00">19:00 - 21:00</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">Отправить заявку</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 Happy Pet. Все права защищены.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
