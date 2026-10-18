@@ -1,19 +1,160 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Наши услуги — Happy Pet</title>
+    <title>Услуги — Happy Pet</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="/css/services.css">
-</head>
-<body>
 
+    <style>
+        .services-toolbar {
+            padding: 35px 55px 10px;
+        }
+
+        .services-toolbar h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .services-toolbar-description {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .services-controls {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .service-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .service-control input,
+        .service-control select {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px;
+            border: 1px solid #d8dce3;
+            border-radius: 10px;
+            background: white;
+            font-family: "Montserrat", sans-serif;
+            font-size: 12px;
+        }
+
+        .services-counter {
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .service-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 18px 0;
+        }
+
+        .service-details span {
+            display: inline-block;
+            padding: 8px 10px;
+            border-radius: 20px;
+            background: #eef3fa;
+            color: #31517a;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .service-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .service-actions .service-book-button {
+            margin-top: 0;
+        }
+
+        .service-outline-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 22px;
+            border: 1px solid #1258b8;
+            border-radius: 30px;
+            color: #1258b8;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .service-outline-button:hover {
+            background: #eef3fa;
+        }
+
+        #servicesGrid .service-card[hidden] {
+            display: none;
+        }
+
+        .service-empty {
+            margin: 20px 55px 60px;
+            padding: 25px;
+            border-radius: 15px;
+            background: white;
+            color: #666;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .service-empty[hidden] {
+            display: none;
+        }
+
+        @media (max-width: 850px) {
+            .services-toolbar {
+                padding: 30px 25px 10px;
+            }
+
+            .services-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .service-empty {
+                margin-right: 25px;
+                margin-left: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .services-toolbar {
+                padding-right: 20px;
+                padding-left: 20px;
+            }
+
+            .service-empty {
+                margin-right: 20px;
+                margin-left: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
 <div class="page-wrapper">
 
     <header class="header">
@@ -29,9 +170,11 @@
             <p class="small-title">ВЕТЕРИНАРНАЯ КЛИНИКА HAPPY PET</p>
             <h1>НАШИ<br><span>УСЛУГИ</span></h1>
             <p class="hero-description">
-                Заботимся о здоровье ваших питомцев на каждом этапе жизни
+                Заботимся о здоровье ваших питомцев на каждом этапе жизни.
             </p>
-            <a href="/contacts" class="blue-button">Записаться на приём</a>
+            <a href="/appointment" class="blue-button">
+                Записаться на приём
+            </a>
         </div>
 
         <div class="hero-image">
@@ -43,139 +186,132 @@
         <p class="section-label">HAPPY PET</p>
         <h2>ВСЁ НЕОБХОДИМОЕ<br>ДЛЯ ЗДОРОВЬЯ ПИТОМЦА</h2>
         <p class="intro-text">
-            Мы предлагаем широкий спектр ветеринарных услуг:
-            от профилактических осмотров и вакцинации
-            до диагностики, хирургии и стоматологии.
+            От профилактических осмотров и вакцинации до диагностики
+            и лечения — выберите подходящую услугу для своего питомца.
         </p>
     </section>
 
-    <section class="services">
+    <section class="services-toolbar">
+        <p class="section-label">НАШ КАТАЛОГ</p>
+        <h2>НАЙДИТЕ НУЖНУЮ УСЛУГУ</h2>
 
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 2.jpg" alt="Приём ветеринара">
-            </div>
-            <div class="service-content">
-                <span class="service-number">01</span>
-                <h3>ПРИЁМ ВЕТЕРИНАРА</h3>
-                <p>
-                    Первичный и профилактический осмотр питомца,
-                    консультация врача, оценка общего состояния
-                    здоровья и рекомендации по лечению.
-                </p>
-            </div>
-        </article>
+        <p class="services-toolbar-description">
+            Ищите услуги по названию, фильтруйте по категориям
+            и сортируйте по стоимости.
+        </p>
 
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 3.jpg" alt="Вакцинация">
+        <div class="services-controls">
+            <div class="service-control">
+                <label for="serviceSearch">Поиск услуги</label>
+                <input
+                    type="search"
+                    id="serviceSearch"
+                    placeholder="Например, вакцинация..."
+                    autocomplete="off"
+                >
             </div>
-            <div class="service-content">
-                <span class="service-number">02</span>
-                <h3>ВАКЦИНАЦИЯ</h3>
-                <p>
-                    Плановая вакцинация кошек и собак,
-                    подбор подходящей схемы прививок
-                    и профилактика инфекционных заболеваний.
-                </p>
-            </div>
-        </article>
 
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 4.jpg" alt="УЗИ диагностика">
+            <div class="service-control">
+                <label for="categoryFilter">Категория</label>
+                <select id="categoryFilter">
+                    <option value="all">Все категории</option>
+                    <option value="Консультация">Консультация</option>
+                    <option value="Профилактика">Профилактика</option>
+                    <option value="Диагностика">Диагностика</option>
+                    <option value="Лечение">Лечение</option>
+                    <option value="Уход">Уход</option>
+                </select>
             </div>
-            <div class="service-content">
-                <span class="service-number">03</span>
-                <h3>УЗИ-ДИАГНОСТИКА</h3>
-                <p>
-                    Ультразвуковое исследование внутренних
-                    органов для дополнительной диагностики
-                    и контроля состояния животного.
-                </p>
-            </div>
-        </article>
 
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 5.jpg" alt="Лабораторные анализы">
+            <div class="service-control">
+                <label for="serviceSort">Сортировка</label>
+                <select id="serviceSort">
+                    <option value="default">По умолчанию</option>
+                    <option value="price-asc">Сначала дешевле</option>
+                    <option value="price-desc">Сначала дороже</option>
+                    <option value="name-asc">По названию</option>
+                </select>
             </div>
-            <div class="service-content">
-                <span class="service-number">04</span>
-                <h3>АНАЛИЗЫ</h3>
-                <p>
-                    Лабораторные исследования помогают
-                    уточнить диагноз, оценить состояние организма
-                    и контролировать лечение.
-                </p>
-            </div>
-        </article>
+        </div>
 
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 6.jpg" alt="Ветеринарная хирургия">
-            </div>
-            <div class="service-content">
-                <span class="service-number">05</span>
-                <h3>ХИРУРГИЯ</h3>
-                <p>
-                    Плановые и экстренные хирургические
-                    вмешательства с предварительным обследованием
-                    и последующим наблюдением питомца.
-                </p>
-            </div>
-        </article>
-
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 7.jpg" alt="Стоматология для животных">
-            </div>
-            <div class="service-content">
-                <span class="service-number">06</span>
-                <h3>СТОМАТОЛОГИЯ</h3>
-                <p>
-                    Осмотр полости рта, профессиональная
-                    гигиена и помощь при заболеваниях
-                    зубов и дёсен.
-                </p>
-            </div>
-        </article>
-
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 8.jpg" alt="Дерматология">
-            </div>
-            <div class="service-content">
-                <span class="service-number">07</span>
-                <h3>ДЕРМАТОЛОГИЯ</h3>
-                <p>
-                    Диагностика проблем кожи и шерсти,
-                    аллергических реакций, зуда и других
-                    дерматологических заболеваний.
-                </p>
-            </div>
-        </article>
-
-        <article class="service-card">
-            <div class="service-image">
-                <img src="/Images/services 9.jpg" alt="Стационар">
-            </div>
-            <div class="service-content">
-                <span class="service-number">08</span>
-                <h3>СТАЦИОНАР</h3>
-                <p>
-                    Наблюдение за питомцами, которым требуется
-                    медицинский контроль, восстановление
-                    или уход после процедур.
-                </p>
-            </div>
-        </article>
-
+        <p class="services-counter" id="servicesCounter" role="status">
+            Всего услуг: {{ services|length }}
+        </p>
     </section>
+
+    <section class="services" id="servicesGrid">
+        {% for service in services %}
+        <article
+            class="service-card"
+            data-name="{{ service['name']|lower }}"
+            data-description="{{ service['description']|lower }}"
+            data-category="{{ service['category'] }}"
+            data-price="{{ service['price'] }}"
+            data-index="{{ loop.index0 }}"
+        >
+            <div class="service-image">
+                <img
+                    src="/Images/{{ service['image'] }}"
+                    alt="{{ service['name'] }}"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="service-content">
+                <span class="service-number">
+                    {{ "%02d"|format(loop.index) }}
+                </span>
+
+                <h3>{{ service['name']|upper }}</h3>
+
+                <p class="service-description">
+                    {{ service['description'] }}
+                </p>
+
+                <div class="service-details">
+                    <span>Цена: {{ service['price'] }} ₽</span>
+
+                    <span>
+                        {% if service['duration_minutes'] >= 1440 %}
+                            {{ service['duration_minutes'] // 1440 }} дн.
+                        {% else %}
+                            {{ service['duration_minutes'] }} мин.
+                        {% endif %}
+                    </span>
+
+                    <span>{{ service['category'] }}</span>
+                </div>
+
+                <div class="service-actions">
+                    <a
+                        href="/services/{{ service['id'] }}"
+                        class="blue-button service-book-button"
+                    >
+                        Подробнее
+                    </a>
+
+                    <a
+                        href="/appointment"
+                        class="service-outline-button"
+                    >
+                        Записаться
+                    </a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+
+    <p class="service-empty" id="servicesEmpty" hidden>
+        Ничего не найдено. Попробуйте изменить запрос или категорию.
+    </p>
 
     <section class="why-us">
         <div class="why-image">
-            <img src="/Images/services 10.jpg" alt="Питомец в ветеринарной клинике">
+            <img
+                src="/Images/services 10.jpg"
+                alt="Питомец в ветеринарной клинике"
+            >
         </div>
 
         <div class="why-content">
@@ -184,17 +320,17 @@
 
             <div class="why-item">
                 <span>01</span>
-                <p>Внимательное отношение к каждому питомцу и его владельцу.</p>
+                <p>Внимательное отношение к каждому питомцу.</p>
             </div>
 
             <div class="why-item">
                 <span>02</span>
-                <p>Современные методы диагностики и комплексный подход.</p>
+                <p>Современные методы диагностики.</p>
             </div>
 
             <div class="why-item">
                 <span>03</span>
-                <p>Понятные рекомендации и забота на каждом этапе лечения.</p>
+                <p>Понятные рекомендации и забота о здоровье животных.</p>
             </div>
         </div>
     </section>
@@ -202,8 +338,10 @@
     <section class="appointment">
         <p class="section-label">HAPPY PET</p>
         <h2>ЗАПИШИТЕСЬ<br>НА ПРИЁМ</h2>
-        <p>Мы поможем подобрать удобное время для посещения ветеринарного врача.</p>
-        <a href="/contacts" class="blue-button">Записаться на приём</a>
+        <p>Выберите удобный способ записаться в нашу клинику.</p>
+        <a href="/appointment" class="blue-button">
+            Перейти к записи
+        </a>
     </section>
 
     <footer class="footer">
@@ -216,7 +354,86 @@
 
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("serviceSearch");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const sortSelect = document.getElementById("serviceSort");
+    const grid = document.getElementById("servicesGrid");
+    const counter = document.getElementById("servicesCounter");
+    const emptyMessage = document.getElementById("servicesEmpty");
+
+    const cards = Array.from(grid.querySelectorAll(".service-card"));
+    const totalCount = cards.length;
+
+    function normalize(value) {
+        return value.toLocaleLowerCase("ru").trim();
+    }
+
+    function updateServices() {
+        const query = normalize(searchInput.value);
+        const category = categoryFilter.value;
+        const sortMode = sortSelect.value;
+
+        const sortedCards = [...cards];
+
+        sortedCards.sort(function (a, b) {
+            if (sortMode === "price-asc") {
+                return Number(a.dataset.price) - Number(b.dataset.price);
+            }
+
+            if (sortMode === "price-desc") {
+                return Number(b.dataset.price) - Number(a.dataset.price);
+            }
+
+            if (sortMode === "name-asc") {
+                return a.dataset.name.localeCompare(b.dataset.name, "ru");
+            }
+
+            return Number(a.dataset.index) - Number(b.dataset.index);
+        });
+
+        let visibleCount = 0;
+
+        sortedCards.forEach(function (card) {
+            const text = normalize(
+                card.dataset.name + " " +
+                card.dataset.description + " " +
+                card.dataset.category
+            );
+
+            const matchesSearch = text.includes(query);
+            const matchesCategory =
+                category === "all" || card.dataset.category === category;
+
+            card.hidden = !(matchesSearch && matchesCategory);
+
+            if (!card.hidden) {
+                visibleCount++;
+            }
+
+            grid.appendChild(card);
+        });
+
+        counter.textContent =
+            "Показано услуг: " + visibleCount + " из " + totalCount;
+
+        emptyMessage.hidden = visibleCount !== 0;
+
+        if (totalCount === 0) {
+            emptyMessage.textContent =
+                "В базе данных пока нет доступных услуг.";
+            emptyMessage.hidden = false;
+        }
+    }
+
+    searchInput.addEventListener("input", updateServices);
+    categoryFilter.addEventListener("change", updateServices);
+    sortSelect.addEventListener("change", updateServices);
+
+    updateServices();
+});
+</script>
+
 </body>
 </html>
-```
-
