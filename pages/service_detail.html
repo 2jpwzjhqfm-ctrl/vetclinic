@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ service['name'] }} — Happy Pet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/services.css">
+
+    <style>
+        .detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 45px;
+            align-items: center;
+            padding: 60px 55px;
+            background: #fff;
+        }
+
+        .detail-image {
+            height: 420px;
+            overflow: hidden;
+            border-radius: 80px 80px 20px 20px;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detail-info h1 {
+            margin: 10px 0 20px;
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(38px, 5vw, 62px);
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .detail-description {
+            margin-bottom: 25px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .detail-meta {
+            margin-bottom: 28px;
+            padding: 18px 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .detail-meta p {
+            margin: 12px 0;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .detail-back {
+            color: #1258b8;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 800px) {
+            .detail-layout {
+                grid-template-columns: 1fr;
+                padding: 35px 25px;
+                gap: 30px;
+            }
+
+            .detail-image {
+                height: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .detail-layout {
+                padding: 25px 20px;
+            }
+
+            .detail-image {
+                height: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+    <header class="header">
+        <div class="logo">
+            <span class="logo-paw">✣</span>
+            <span>HAPPY PET</span>
+        </div>
+        <a href="/services" class="home-link">← Все услуги</a>
+    </header>
+
+    <main class="detail-layout">
+        <div class="detail-image">
+            <img
+                src="/Images/{{ service['image'] }}"
+                alt="{{ service['name'] }}"
+            >
+        </div>
+
+        <div class="detail-info">
+            <p class="section-label">{{ service['category']|upper }}</p>
+
+            <h1>{{ service['name'] }}</h1>
+
+            <p class="detail-description">
+                {{ service['description'] }}
+            </p>
+
+            <div class="detail-meta">
+                <p>
+                    <strong>Стоимость:</strong>
+                    {{ service['price'] }} ₽
+                </p>
+
+                <p>
+                    <strong>Категория:</strong>
+                    {{ service['category'] }}
+                </p>
+
+                <p>
+                    <strong>Длительность:</strong>
+                    {% if service['duration_minutes'] >= 1440 %}
+                        {{ service['duration_minutes'] // 1440 }} дн.
+                    {% else %}
+                        {{ service['duration_minutes'] }} минут
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="detail-actions">
+                <a href="/appointment" class="blue-button">
+                    Записаться на приём
+                </a>
+
+                <a href="/services" class="detail-back">
+                    Вернуться к услугам
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-logo">
+            <span class="logo-paw">✣</span>
+            <span>HAPPY PET</span>
+        </div>
+        <p>© 2026 Happy Pet. Ветеринарная клиника</p>
+    </footer>
+
+</div>
+</body>
+</html>
