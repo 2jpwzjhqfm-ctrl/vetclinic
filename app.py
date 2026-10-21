@@ -1,7 +1,6 @@
-
-import sqlite3
-from pathlib import Path
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
+from database import init_db
+from models import add_client, get_all_clients
 
 app = Flask(
     __name__,
@@ -9,6 +8,9 @@ app = Flask(
     static_folder=".",
     static_url_path=""
 )
+
+# Инициализация базы данных при запуске
+init_db()
 
 
 @app.route("/")
@@ -18,46 +20,7 @@ def home():
 
 @app.route("/services")
 def services():
-    db_path = Path(__file__).resolve().parent / "clinic.db"
-
-    with sqlite3.connect(db_path) as connection:
-        connection.row_factory = sqlite3.Row
-
-        services_from_db = connection.execute("""
-            SELECT id, name, description, price,
-                   duration_minutes, category, image
-            FROM services
-            WHERE is_active = 1
-            ORDER BY id
-        """).fetchall()
-
-    return render_template(
-        "services.html",
-        services=services_from_db
-    )
-
-
-@app.route("/services/<int:service_id>")
-def service_detail(service_id):
-    db_path = Path(__file__).resolve().parent / "clinic.db"
-
-    with sqlite3.connect(db_path) as connection:
-        connection.row_factory = sqlite3.Row
-
-        service = connection.execute("""
-            SELECT id, name, description, price,
-                   duration_minutes, category, image
-            FROM services
-            WHERE id = ? AND is_active = 1
-        """, (service_id,)).fetchone()
-
-    if service is None:
-        return "Услуга не найдена", 404
-
-    return render_template(
-        "service_detail.html",
-        service=service
-    )
+    return render_template("services.html")
 
 
 @app.route("/specialists")
@@ -67,31 +30,37 @@ def specialists():
 
 @app.route("/appointment")
 def appointment():
-    service_id = request.args.get("service_id", type=int)
-    selected_service = None
-
-    if service_id is not None:
-        db_path = Path(__file__).resolve().parent / "clinic.db"
-
-        with sqlite3.connect(db_path) as connection:
-            connection.row_factory = sqlite3.Row
-
-            selected_service = connection.execute("""
-                SELECT id, name, description, price,
-                       duration_minutes, category, image
-                FROM services
-                WHERE id = ? AND is_active = 1
-            """, (service_id,)).fetchone()
-
-    return render_template(
-        "appointment.html",
-        selected_service=selected_service
-    )
+    return render_template("appointment.html")
 
 
 @app.route("/contacts")
 def contacts():
     return render_template("contacts.html")
+
+
+# --- Твоя часть: работа с клиентами ---
+
+@app.route("/add_client", methods=["POST"])
+def add_client_route():
+    """Обработка формы записи."""
+    pet_name = request.form.get("pet_name")
+    pet_type = request.form.get("pet_type")
+    owner_name = request.form.get("owner_name")
+    phone = request.form.get("phone")
+    reason = request.form.get("reason", "")
+    preferred_time = request.form.get("preferred_time", "")
+
+    if pet_name and owner_name and phone:
+        add_client(pet_name, pet_type, owner_name, phone, reason, preferred_time)
+
+    return redirect(url_for("admin_clients"))
+
+
+@app.route("/admin/clients")
+def admin_clients():
+    """Страница со списком всех клиентов."""
+    clients = get_all_clients()
+    return render_template("admin_clients.html", clients=clients)
 
 
 if __name__ == "__main__":
