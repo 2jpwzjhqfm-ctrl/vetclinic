@@ -147,48 +147,48 @@
             <h1>Запись на прием</h1>
             <p class="subtitle">Заполните форму, и мы свяжемся с вами для подтверждения времени визита.</p>
 
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="pet-name">Имя питомца</label>
-                    <input type="text" id="pet-name" class="form-control" placeholder="Например: Барсик" required>
-                </div>
+            <form action="/add_client" method="POST">
+    <div class="form-group">
+        <label for="pet-name">Имя питомца</label>
+        <input type="text" id="pet-name" name="pet_name" class="form-control" placeholder="Например: Барсик" required>
+    </div>
 
-                <div class="form-group">
-                    <label for="pet-type">Вид и порода</label>
-                    <input type="text" id="pet-type" class="form-control" placeholder="Например: Кошка, Британская" required>
-                </div>
+    <div class="form-group">
+        <label for="pet-type">Вид и порода</label>
+        <input type="text" id="pet-type" name="pet_type" class="form-control" placeholder="Например: Кошка, Британская" required>
+    </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="owner-name">Ваше имя</label>
-                        <input type="text" id="owner-name" class="form-control" placeholder="Иван Иванов" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Телефон</label>
-                        <input type="tel" id="phone" class="form-control" placeholder="+7 (999) 000-00-00" required>
-                    </div>
-                </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="owner-name">Ваше имя</label>
+            <input type="text" id="owner-name" name="owner_name" class="form-control" placeholder="Иван Иванов" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="tel" id="phone" name="phone" class="form-control" placeholder="+7 (999) 000-00-00" required>
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label for="reason">Причина обращения / Симптомы</label>
-                    <textarea id="reason" class="form-control" rows="4" placeholder="Кратко опишите состояние питомца..."></textarea>
-                </div>
+    <div class="form-group">
+        <label for="reason">Причина обращения / Симптомы</label>
+        <textarea id="reason" name="reason" class="form-control" rows="4" placeholder="Кратко опишите состояние питомца..."></textarea>
+    </div>
 
-                <div class="form-group">
-                    <label for="preferred-time">Предпочтительное время приема</label>
-                    <select id="preferred-time" class="form-control">
-                        <option value="">Выберите время</option>
-                        <option value="09:00">09:00 - 11:00</option>
-                        <option value="11:00">11:00 - 13:00</option>
-                        <option value="13:00">13:00 - 15:00</option>
-                        <option value="15:00">15:00 - 17:00</option>
-                        <option value="17:00">17:00 - 19:00</option>
-                        <option value="19:00">19:00 - 21:00</option>
-                    </select>
-                </div>
+    <div class="form-group">
+        <label for="preferred-time">Предпочтительное время приема</label>
+        <select id="preferred-time" name="preferred_time" class="form-control">
+            <option value="">Выберите время</option>
+            <option value="09:00-11:00">09:00 - 11:00</option>
+            <option value="11:00-13:00">11:00 - 13:00</option>
+            <option value="13:00-15:00">13:00 - 15:00</option>
+            <option value="15:00-17:00">15:00 - 17:00</option>
+            <option value="17:00-19:00">17:00 - 19:00</option>
+            <option value="19:00-21:00">19:00 - 21:00</option>
+        </select>
+    </div>
 
-                <button type="submit" class="btn-primary">Отправить заявку</button>
-            </form>
+    <button type="submit" class="btn-primary">Отправить заявку</button>
+</form>
         </div>
     </main>
 
