@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/services.css">
 
     <style>
@@ -155,15 +156,21 @@
 </head>
 
 <body>
+
+<header class="header">
+    <div class="container header-content">
+        <a href="/" class="logo">Happy Pet</a>
+        <nav class="nav">
+            <a href="/">О клинике</a>
+            <a href="/services">Услуги</a>
+            <a href="/specialists">Специалисты</a>
+            <a href="/contacts">Контакты</a>
+        </nav>
+    </div>
+</header>
+
 <div class="page-wrapper">
 
-    <header class="header">
-        <div class="logo">
-            <span class="logo-paw">✣</span>
-            <span>HAPPY PET</span>
-        </div>
-        <a href="/" class="home-link">Главная</a>
-    </header>
 
     <section class="hero">
         <div class="hero-text">
@@ -283,20 +290,22 @@
                 </div>
 
                 <div class="service-actions">
-                    <a
-                        href="/services/{{ service['id'] }}"
-                        class="blue-button service-book-button"
-                    >
-                        Подробнее
-                    </a>
+    <a
+        href="/services/{{ service['id'] }}"
+        class="blue-button service-book-button"
+    >
+        Подробнее
+    </a>
 
-                    <a
-                        href="/appointment"
-                        class="service-outline-button"
-                    >
-                        Записаться
-                    </a>
-                </div>
+    <a
+        href="/appointment"
+        class="service-outline-button"
+    >
+        Записаться
+    </a>
+
+    
+</div>
             </div>
         </article>
         {% endfor %}

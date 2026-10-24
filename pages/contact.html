@@ -14,7 +14,7 @@
   >
 
   <title>Контакты — ветеринарная клиника Забота</title>
-
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     :root {
       --blue: #0758c9;
@@ -73,64 +73,74 @@
       margin: 0 auto;
     }
 
-    /* Шапка */
+   
 
-    .header {
-      background: var(--cream);
+    
+/* Шапка — единый стиль сайта */
+.header {
+    width: 100%;
+    background: var(--cream);
+}
+
+.header-content {
+    display: flex;
+    min-height: 86px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+}
+
+.header .logo {
+    display: inline-flex;
+    align-items: center;
+    color: var(--blue);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-left: auto;
+}
+
+.nav a {
+    padding: 9px 0;
+    color: #4f5054;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav a:hover {
+    color: var(--blue);
+}
+
+@media (max-width: 640px) {
+    .header-content {
+        min-height: 72px;
+        gap: 12px;
     }
 
-    .header__inner {
-      display: flex;
-      min-height: 86px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 28px;
+    .header .logo {
+        font-size: 15px;
     }
 
-    .logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--blue);
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.13em;
+    .nav {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px 14px;
     }
 
-    .logo__icon {
-      display: grid;
-      width: 38px;
-      height: 38px;
-      place-items: center;
-      border-radius: 10px;
-      color: var(--white);
-      background: var(--blue);
-      font-size: 20px;
-      box-shadow: 0 7px 16px rgba(7, 88, 201, 0.24);
+    .nav a {
+        font-size: 12px;
     }
+}
 
-    .header__nav {
-      display: flex;
-      gap: 32px;
-      margin-left: auto;
-      color: #4f5054;
-      font-size: 14px;
-    }
-
-    .header__nav a {
-      padding: 9px 0;
-      transition: color 0.2s ease;
-    }
-
-    .header__nav a:hover {
-      color: var(--blue);
-    }
-
-    .header__phone {
-      color: var(--blue);
-      font-size: 14px;
-      font-weight: 700;
-    }
 
     /* Общие стили */
 
@@ -896,26 +906,20 @@
 
 <body>
 
-  <header class="header">
-    <div class="container header__inner">
+  
+<header class="header">
+    <div class="container header-content">
+        <a href="/" class="logo">Happy Pet</a>
 
-      <a class="logo" href="#top" aria-label="Ветеринарная клиника Забота">
-        <span class="logo__icon">🐾</span>
-        <span class="logo__name">ЗАБОТА</span>
-      </a>
-
-      <nav class="header__nav" aria-label="Навигация">
-        <a href="#contacts">Контакты</a>
-        <a href="#address">Адрес</a>
-        <a href="#map">Маршрут</a>
-      </nav>
-
-      <a class="header__phone" href="tel:+79011232233">
-        +7 (901) 123-22-33
-      </a>
-
+        <nav class="nav">
+            <a href="/">О клинике</a>
+            <a href="/services">Услуги</a>
+            <a href="/specialists">Специалисты</a>
+            <a href="/contacts">Контакты</a>
+        </nav>
     </div>
-  </header>
+</header>
+
 
   <main id="top">
 
