@@ -65,3 +65,6 @@ def admin_clients():
 
 if __name__ == "__main__":
     app.run(debug=True)
+from account import account_bp   
+
+app.register_blueprint(account_bp)
