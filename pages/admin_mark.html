@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отметка визита — Happy Pet</title>
+  <link rel="stylesheet" href="/css/account.css">
+</head>
+<body class="acc-page">
+  <header class="acc-header">
+    <a class="acc-logo" href="/">🐾 Happy Pet</a>
+    <nav>
+      <a href="/">Главная</a>
+      <a href="/services">Услуги</a>
+      <a href="/appointment">Запись</a>
+    </nav>
+  </header>
+
+  <main class="acc-wrap acc-wrap--narrow">
+    <h1 class="acc-title">Отметка визита (админ)</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="acc-flash acc-flash--{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form class="acc-card acc-form" method="post">
+      <label class="acc-label" for="admin_code">Код администратора</label>
+      <input class="acc-input" type="password" id="admin_code" name="admin_code" required>
+
+      <label class="acc-label" for="email">E-mail клиента</label>
+      <input class="acc-input" type="email" id="email" name="email"
+             value="{{ form.get("email", "") }}" required>
+
+      <label class="acc-label" for="service">Услуга</label>
+      <input class="acc-input" type="text" id="service" name="service"
+             value="{{ form.get("service", "") }}" placeholder="Например: вакцинация" required>
+
+      <label class="acc-label" for="amount">Сумма, ₽</label>
+      <input class="acc-input" type="text" id="amount" name="amount"
+             value="{{ form.get("amount", "") }}" placeholder="1200" required>
+
+      <label class="acc-label" for="visit_date">Дата визита</label>
+      <input class="acc-input" type="date" id="visit_date" name="visit_date"
+             value="{{ form.get("visit_date", "") }}">
+
+      <button class="acc-btn" type="submit">Отметить визит</button>
+      <p class="acc-note">Клиенту начислятся баллы, статус пересчитается автоматически.</p>
+    </form>
+  </main>
+</body>
+</html>
