@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход — Happy Pet</title>
+  <link rel="stylesheet" href="/css/account.css">
+</head>
+<body class="acc-page">
+  <header class="acc-header">
+    <a class="acc-logo" href="/">🐾 Happy Pet</a>
+    <nav>
+      <a href="/">Главная</a>
+      <a href="/services">Услуги</a>
+      <a href="/appointment">Запись</a>
+      <a href="/register">Регистрация</a>
+      <a href="/register">Регистрация</a>
+      <a href="/login">Личный кабинет</a>
+    </nav>
+  </header>
+
+  <main class="acc-wrap acc-wrap--narrow">
+    <h1 class="acc-title">Вход в кабинет</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="acc-flash acc-flash--{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form class="acc-card acc-form" method="post">
+      <label class="acc-label" for="email">E-mail</label>
+      <input class="acc-input" type="email" id="email" name="email"
+             value="{{ form.get("email", "") }}" required autofocus>
+
+      <label class="acc-label" for="password">Пароль</label>
+      <input class="acc-input" type="password" id="password" name="password" required>
+
+      <button class="acc-btn" type="submit">Войти</button>
+      <p class="acc-alt">Нет аккаунта? <a href="/register">Зарегистрируйтесь</a></p>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет — Happy Pet</title>
+  <link rel="stylesheet" href="/css/account.css">
+</head>
+<body class="acc-page">
+  <header class="acc-header">
+    <a class="acc-logo" href="/">🐾 Happy Pet</a>
+    <nav>
+      <a href="/">Главная</a>
+      <a href="/services">Услуги</a>
+      <a href="/appointment">Запись</a>
+      <a href="/logout">Выйти</a>
+    </nav>
+  </header>
+
+  <main class="acc-wrap">
+    <h1 class="acc-title">Личный кабинет</h1>
+    <p class="acc-hello">Привет, {{ user["name"] }}!</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="acc-flash acc-flash--{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <section class="acc-card acc-loyalty acc-loyalty--{{ level_slug }}">
+      <div class="acc-card-top">
+        <span class="acc-card-label">Карта лояльности Happy Card</span>
+        <span class="acc-badge">{{ level_name }}</span>
+      </div>
+      <div class="acc-card-number">{{ card_number }}</div>
+      <div class="acc-card-row">
+        <div><b>{{ points }}</b> баллов (≈ {{ points_value }} ₽)</div>
+        <div><b>{{ discount }}%</b> скидка</div>
+        <div><b>{{ total_visits }}</b> {{ visits_word }}</div>
+      </div>
+      {% if next_level %}
+        <div class="acc-progress">
+          <div class="acc-progress__bar" style="width: {{ progress_pct }}%;"></div>
+        </div>
+        <p class="acc-progress__hint">До статуса «{{ next_level["name"] }}» (скидка {{ next_level["discount"] }}%) — ещё {{ next_level["left"] }} {{ visits_word }}</p>
+      {% else %}
+        <p class="acc-progress__hint">У вас максимальный статус — скидка {{ discount }}% 🎉</p>
+      {% endif %}
+    </section>
+
+    <section class="acc-card">
+      <h2 class="acc-h2">История посещений</h2>
+      {% if visits %}
+        <table class="acc-table">
+          <tr><th>Дата</th><th>Услуга</th><th>Сумма</th></tr>
+          {% for v in visits %}
+            <tr>
+              <td>{{ v["visit_date"] }}</td>
+              <td>{{ v["service"] }}</td>
+              <td>{{ "%.0f" | format(v["amount"]) }} ₽</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p class="acc-empty">Визитов пока нет — запишитесь на приём, и они появятся здесь автоматически.</p>
+      {% endif %}
+      <p class="acc-note">За каждый визит начисляется 100 баллов, 1 балл = 1 ₽ скидки на любой приём. Баллы копятся автоматически.</p>
+    </section>
+  </main>
+</body>
+</html>
