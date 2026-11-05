@@ -1,6 +1,9 @@
+import os
+
 from flask import Flask, render_template, request, redirect, url_for
 from database import init_db
 from models import add_client, get_all_clients
+from account import account_bp, init_db as init_account_db
 
 app = Flask(
     __name__,
@@ -9,8 +12,15 @@ app = Flask(
     static_url_path=""
 )
 
-# Инициализация базы данных при запуске
-init_db()
+# Ключ для сессий (вход, выход, личный кабинет)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-key-change-me")
+
+# Инициализация баз данных при запуске
+init_db()            # база группы (клиенты записи)
+init_account_db()    # твоя база (users и visits)
+
+# Подключаем модуль личного кабинета
+app.register_blueprint(account_bp)
 
 
 @app.route("/")
@@ -65,6 +75,3 @@ def admin_clients():
 
 if __name__ == "__main__":
     app.run(debug=True)
-from account import account_bp   
-
-app.register_blueprint(account_bp)
