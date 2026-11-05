@@ -4,49 +4,35 @@ import datetime
 from functools import wraps
 
 from flask import (
-    Flask, Blueprint, render_template, request, redirect, url_for,
+    Blueprint, render_template, request, redirect, url_for,
     session, flash, send_from_directory
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# --- Подключаем переменные из .env -------------------------------------------
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass  # если python-dotenv не установлен, просто работаем без .env
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "vetclinic.db")
-CSS_DIR = os.path.join(BASE_DIR, "css")          # где лежит account.css
+DB_PATH = os.path.join(BASE_DIR, "clinic.db")   
+CSS_DIR = os.path.join(BASE_DIR, "css")         
 
 ADMIN_CODE = os.environ.get("ADMIN_CODE", "vet-1234")
-SECRET_KEY = os.environ.get("SECRET_KEY", "dev-key-change-me")
 
-# --- Правила программы лояльности (меняются в одном месте) -------------------
-POINTS_PER_VISIT = 100        # баллов за визит
-RUB_PER_POINT = 1             # 1 балл = 1 рубль скидки
+#  Правила программы лояльности (меняются в одном месте) 
+POINTS_PER_VISIT = 100       
+RUB_PER_POINT = 1            
 LEVELS = [
     {"slug": "standard", "name": "Стандарт",   "min_visits": 0,  "discount": 0},
     {"slug": "silver",   "name": "Серебряный", "min_visits": 5,  "discount": 5},
     {"slug": "gold",     "name": "Золотой",    "min_visits": 10, "discount": 10},
 ]
 
-# --- Создаём приложение Flask прямо здесь -------------------------------------
-app = Flask(__name__)
-app.secret_key = SECRET_KEY
-
+# Модуль личного кабинета 
 account_bp = Blueprint("account", __name__, template_folder="templates")
-
-
-
-# --- Отдаём CSS прямо из модуля, чтобы не зависеть от настроек статики ------
+ 
 @account_bp.route("/css/account.css")
 def account_css():
     return send_from_directory(CSS_DIR, "account.css", mimetype="text/css")
 
 
-# --- База данных -------------------------------------------------------------
+#  База данных 
 def init_db():
     with sqlite3.connect(DB_PATH) as db:
         db.executescript("""
@@ -72,9 +58,6 @@ def get_db():
     db = sqlite3.connect(DB_PATH)
     db.row_factory = sqlite3.Row
     return db
-
-
-# --- Вспомогательное ----------------------------------------------------------
 def current_user():
     uid = session.get("user_id")
     if not uid:
@@ -121,7 +104,7 @@ def next_level_for(visits_count):
     return None
 
 
-# --- Маршруты -----------------------------------------------------------------
+# Маршруты 
 @account_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user():
@@ -279,10 +262,3 @@ def admin_mark():
         return redirect(url_for("account.admin_mark"))
 
     return render_template("admin_mark.html", form={})
-
-app.register_blueprint(account_bp)
-# --- Запуск сервера ------------------------------------------------------------
-if __name__ == "__main__":
-    init_db()
-    print("✅ Сервер запущен! Открой в браузере: http://127.0.0.1:5000/register")
-    app.run(debug=True)
