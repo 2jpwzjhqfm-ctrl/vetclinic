@@ -186,3 +186,326 @@
   .acc-card-number { font-size: 22px; letter-spacing: 2px; }
   .acc-card-row { flex-direction: column; gap: 4px; }
 }
+/* =========================
+   МОИ ПИТОМЦЫ
+========================= */
+
+.acc-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.acc-note--top {
+    margin-top: 5px;
+}
+
+.acc-btn--link {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 0;
+    white-space: nowrap;
+}
+
+.acc-pet-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 22px;
+}
+
+.acc-pet-card {
+    padding: 20px;
+    border: 1px solid var(--acc-border);
+    border-radius: 14px;
+    background: #fbfdfd;
+}
+
+.acc-pet-card__top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.acc-pet-avatar {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #e8f4f1;
+    border-radius: 15px;
+    font-size: 30px;
+}
+
+.acc-pet-title h3 {
+    margin: 0 0 5px;
+    font-size: 19px;
+    color: var(--acc-text);
+}
+
+.acc-pet-title p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--acc-muted);
+}
+
+.acc-pet-details p {
+    margin: 9px 0;
+    font-size: 14px;
+    color: var(--acc-text);
+}
+
+.acc-pet-notes {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f0f6f5;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.acc-pet-notes p {
+    margin-bottom: 0;
+    color: var(--acc-muted);
+}
+
+.acc-pet-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--acc-border);
+}
+
+.acc-pet-actions form {
+    margin: 0;
+}
+
+.acc-small-btn {
+    display: inline-block;
+    padding: 9px 13px;
+    border: none;
+    border-radius: 8px;
+    background: var(--acc-primary);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.acc-small-btn--danger {
+    background: #d9534f;
+}
+
+.acc-pets-empty {
+    padding: 35px 15px;
+    text-align: center;
+}
+
+.acc-pets-empty-icon {
+    font-size: 42px;
+}
+
+.acc-pets-empty h3 {
+    margin-bottom: 8px;
+}
+
+.acc-pets-empty p {
+    color: var(--acc-muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+@media (max-width: 650px) {
+    .acc-pet-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .acc-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+/* =================================
+   ДНЕВНИК ПИТОМЦА
+================================= */
+
+.diary-pet-info {
+    border-left: 4px solid var(--acc-primary);
+}
+
+.diary-pet-info h2 {
+    margin: 0 0 8px;
+    color: var(--acc-primary-dark);
+    font-size: 23px;
+}
+
+.diary-pet-info p {
+    margin: 0 0 10px;
+    color: var(--acc-muted);
+}
+
+.diary-pet-info span {
+    font-size: 13px;
+    color: var(--acc-muted);
+}
+
+.diary-form {
+    padding: 28px;
+}
+
+.diary-group {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--acc-border);
+}
+
+.diary-group h3 {
+    margin: 0 0 16px;
+    font-size: 17px;
+    color: var(--acc-text);
+}
+
+/* Кнопки выбора состояния */
+
+.diary-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.diary-option {
+    cursor: pointer;
+    position: relative;
+}
+
+.diary-option input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.diary-option span {
+    display: block;
+    padding: 11px 17px;
+    border: 1px solid var(--acc-border);
+    border-radius: 10px;
+    background: #fbfdfd;
+    color: var(--acc-text);
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.diary-option input:checked + span {
+    background: var(--acc-primary);
+    color: white;
+    border-color: var(--acc-primary);
+}
+
+.diary-option:hover span {
+    border-color: var(--acc-primary);
+}
+
+.diary-option input:focus-visible + span {
+    outline: 3px solid var(--acc-primary);
+    outline-offset: 3px;
+}
+
+/* Быстрые отметки */
+
+.diary-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.diary-check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 15px;
+    border: 1px solid var(--acc-border);
+    border-radius: 10px;
+    background: #fbfdfd;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.diary-check:hover {
+    border-color: var(--acc-primary);
+    background: #f3faf8;
+}
+
+.diary-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--acc-primary);
+    cursor: pointer;
+}
+
+.diary-check span {
+    font-size: 14px;
+}
+
+/* История наблюдений */
+
+.diary-history {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.diary-history-card {
+    padding: 18px;
+    border: 1px solid var(--acc-border);
+    border-radius: 12px;
+    background: #fbfdfd;
+}
+
+.diary-history-card h3 {
+    margin: 0 0 14px;
+    color: var(--acc-primary-dark);
+    font-size: 16px;
+}
+
+.diary-history-card p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: var(--acc-text);
+}
+
+.diary-history-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 13px;
+}
+
+.diary-history-tags span {
+    padding: 6px 9px;
+    border-radius: 8px;
+    background: #e8f4f1;
+    color: var(--acc-primary-dark);
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .diary-history {
+        grid-template-columns: 1fr;
+    }
+
+    .diary-form {
+        padding: 20px 16px;
+    }
+
+    .diary-option span {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}

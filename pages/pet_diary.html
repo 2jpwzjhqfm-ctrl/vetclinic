@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дневник питомца — Happy Pet</title>
+    <link rel="stylesheet" href="/css/account.css">
+</head>
+
+<body class="acc-page">
+
+<header class="acc-header">
+    <a class="acc-logo" href="/">🐾 Happy Pet</a>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/services">Услуги</a>
+        <a href="/account">Личный кабинет</a>
+        <a href="/logout">Выйти</a>
+    </nav>
+</header>
+
+<main class="acc-wrap">
+
+    <a class="acc-cancel-link"
+       href="{{ url_for('account.account_page') }}">
+        ← Вернуться к питомцам
+    </a>
+
+    <h1 class="acc-title">Дневник питомца 🐾</h1>
+
+    <p class="acc-hello">
+        Небольшие ежедневные отметки о состоянии вашего любимца.
+    </p>
+
+    <section class="acc-card diary-pet-info">
+        <h2>{{ pet["name"] }}</h2>
+        <p>
+            {{ pet["animal_type"] }}
+            {% if pet["breed"] %}
+                · {{ pet["breed"] }}
+            {% endif %}
+        </p>
+        <span>📅 {{ today }}</span>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, msg in messages %}
+            <div class="acc-flash acc-flash--{{ category }}">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="post" class="acc-card diary-form">
+
+        <h2 class="acc-h2">Как чувствует себя питомец сегодня?</h2>
+
+        <!-- АППЕТИТ -->
+        <div class="diary-group">
+            <h3>🍽️ Аппетит</h3>
+
+            {% set appetite_value = today_entry.get('appetite', 'Обычный') %}
+
+            <div class="diary-options">
+                {% for option in ['Слабый', 'Обычный', 'Хороший'] %}
+                    <label class="diary-option">
+                        <input type="radio"
+                               name="appetite"
+                               value="{{ option }}"
+                               {% if appetite_value == option %}checked{% endif %}
+                               required>
+                        <span>{{ option }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- АКТИВНОСТЬ -->
+        <div class="diary-group">
+            <h3>🏃 Активность</h3>
+
+            {% set activity_value = today_entry.get('activity', 'Обычная') %}
+
+            <div class="diary-options">
+                {% for option in ['Низкая', 'Обычная', 'Высокая'] %}
+                    <label class="diary-option">
+                        <input type="radio"
+                               name="activity"
+                               value="{{ option }}"
+                               {% if activity_value == option %}checked{% endif %}
+                               required>
+                        <span>{{ option }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- САМОЧУВСТВИЕ -->
+        <div class="diary-group">
+            <h3>💚 Самочувствие</h3>
+
+            {% set condition_value = today_entry.get('wellbeing', 'Хорошее') %}
+
+            <div class="diary-options">
+                {% for option in ['Хорошее', 'Обычное', 'Есть изменения'] %}
+                    <label class="diary-option">
+                        <input type="radio"
+                               name="wellbeing"
+                               value="{{ option }}"
+                               {% if condition_value == option %}checked{% endif %}
+                               required>
+                        <span>{{ option }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ВОДНЫЙ БАЛАНС -->
+        <div class="diary-group">
+            <h3>💧 Потребление воды</h3>
+
+            {% set water_value = today_entry.get('water_intake', 'Обычное') %}
+
+            <div class="diary-options">
+                {% for option in ['Меньше обычного', 'Обычное', 'Больше обычного'] %}
+                    <label class="diary-option">
+                        <input type="radio"
+                               name="water_intake"
+                               value="{{ option }}"
+                               {% if water_value == option %}checked{% endif %}
+                               required>
+                        <span>{{ option }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ПРИВЫЧКИ -->
+        <div class="diary-group">
+
+            <h3>🐾 Что сегодня делал питомец?</h3>
+
+            <div class="diary-checks">
+
+                <label class="diary-check">
+                    <input type="checkbox"
+                           name="walked"
+                           value="1"
+                           {% if today_entry.get('walked', 0) %}checked{% endif %}>
+                    <span>🚶 Гулял</span>
+                </label>
+
+                <label class="diary-check">
+                    <input type="checkbox"
+                           name="played"
+                           value="1"
+                           {% if today_entry.get('played', 0) %}checked{% endif %}>
+                    <span>🎾 Играл</span>
+                </label>
+
+                <label class="diary-check">
+                    <input type="checkbox"
+                           name="medication_given"
+                           value="1"
+                           {% if today_entry.get('medication_given', 0) %}checked{% endif %}>
+                    <span>💊 Получил назначенные препараты</span>
+                </label>
+
+            </div>
+        </div>
+
+        <button type="submit" class="acc-btn">
+            Сохранить наблюдение
+        </button>
+
+        <p class="acc-note">
+            Данные сохраняются в дневнике выбранного питомца.
+            Повторное заполнение обновляет сегодняшнюю запись.
+        </p>
+
+    </form>
+
+    <!-- ИСТОРИЯ -->
+    <section class="acc-card">
+
+        <h2 class="acc-h2">История наблюдений</h2>
+
+        {% if history %}
+
+            <div class="diary-history">
+
+                {% for item in history %}
+
+                    <div class="diary-history-card">
+
+                        <h3>📅 {{ item["entry_date"] }}</h3>
+
+                        <p>
+                            <strong>Аппетит:</strong>
+                            {{ item["appetite"] }}
+                        </p>
+
+                        <p>
+                            <strong>Активность:</strong>
+                            {{ item["activity"] }}
+                        </p>
+
+                        <p>
+                            <strong>Самочувствие:</strong>
+                            {{ item["wellbeing"] }}
+                        </p>
+
+                        <p>
+                            <strong>Вода:</strong>
+                            {{ item["water_intake"] }}
+                        </p>
+
+                        <div class="diary-history-tags">
+
+                            {% if item["walked"] %}
+                                <span>🚶 Гулял</span>
+                            {% endif %}
+
+                            {% if item["played"] %}
+                                <span>🎾 Играл</span>
+                            {% endif %}
+
+                            {% if item["medication_given"] %}
+                                <span>💊 Принимал назначенные препараты</span>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p class="acc-empty">
+                Пока нет записей. Заполните первую отметку о питомце!
+            </p>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+</body>
+</html>

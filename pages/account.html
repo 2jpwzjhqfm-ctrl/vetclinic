@@ -40,7 +40,7 @@
       </div>
       {% if next_level %}
         <div class="acc-progress">
-          <div class="acc-progress__bar" style="width: {{ progress_pct }}%;"></div>
+         <div class="acc-progress__bar" data-progress="{{ progress_pct }}"></div>
         </div>
         <p class="acc-progress__hint">До статуса «{{ next_level["name"] }}» (скидка {{ next_level["discount"] }}%) — ещё {{ next_level["left"] }} {{ visits_word }}</p>
       {% else %}
@@ -48,6 +48,149 @@
       {% endif %}
     </section>
 
+    <!-- МОИ ПИТОМЦЫ -->
+<section class="acc-card acc-pets-section">
+
+    <div class="acc-section-heading">
+        <div>
+            <h2 class="acc-h2">Мои питомцы 🐾</h2>
+            <p class="acc-note">
+                Здесь хранится информация о ваших любимцах.
+            </p>
+        </div>
+
+        <a class="acc-btn acc-btn--link"
+           href="{{ url_for('account.add_pet') }}">
+            + Добавить питомца
+        </a>
+    </div>
+
+    {% if pets %}
+
+        <div class="acc-pet-grid">
+
+            {% for pet in pets %}
+
+                <article class="acc-pet-card">
+
+                    <div class="acc-pet-card__top">
+
+                        <div class="acc-pet-avatar">
+                            {% if pet["animal_type"] == "Собака" %}
+                                🐶
+                            {% elif pet["animal_type"] == "Кошка" %}
+                                🐱
+                            {% elif pet["animal_type"] == "Птица" %}
+                                🐦
+                            {% elif pet["animal_type"] == "Грызун" %}
+                                🐹
+                            {% elif pet["animal_type"] == "Рептилия" %}
+                                🦎
+                            {% else %}
+                                🐾
+                            {% endif %}
+                        </div>
+
+                        <div class="acc-pet-title">
+                            <h3>{{ pet["name"] }}</h3>
+                            <p>
+                                {{ pet["animal_type"] }}
+                                {% if pet["breed"] %}
+                                    · {{ pet["breed"] }}
+                                {% endif %}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="acc-pet-details">
+
+                        <p>
+                            <strong>Возраст:</strong>
+                            {{ pet["age_label"] }}
+                        </p>
+
+                        <p>
+                            <strong>Пол:</strong>
+                            {{ pet["sex"] or "Не указан" }}
+                        </p>
+
+                        {% if pet["weight"] %}
+                            <p>
+                                <strong>Вес:</strong>
+                                {{ pet["weight"] }} кг
+                            </p>
+                        {% endif %}
+
+                        {% if pet["color"] %}
+                            <p>
+                                <strong>Окрас:</strong>
+                                {{ pet["color"] }}
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+                    {% if pet["health_notes"] %}
+                        <div class="acc-pet-notes">
+                            <strong>Особенности здоровья:</strong>
+                            <p>{{ pet["health_notes"] }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="acc-pet-actions">
+                      <a class="acc-small-btn"
+                         href="{{ url_for('account.pet_diary', pet_id=pet['id']) }}">
+                            📖 Дневник питомца
+                      </a>
+
+                        <a class="acc-small-btn"
+                           href="{{ url_for('account.edit_pet', pet_id=pet['id']) }}">
+                            Редактировать
+                        </a>
+
+                        <form method="post"
+                              action="{{ url_for('account.delete_pet', pet_id=pet['id']) }}"
+                              onsubmit="return confirm('Удалить питомца?');">
+
+                            <button class="acc-small-btn acc-small-btn--danger"
+                                    type="submit">
+                                Удалить
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="acc-pets-empty">
+
+            <div class="acc-pets-empty-icon">🐾</div>
+
+            <h3>Пока нет добавленных питомцев</h3>
+
+            <p>
+                Добавьте своего первого любимца,
+                чтобы хранить всю важную информацию в одном месте.
+            </p>
+
+            <a class="acc-btn acc-btn--link"
+               href="{{ url_for('account.add_pet') }}">
+                Добавить первого питомца
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
     <section class="acc-card">
       <h2 class="acc-h2">История посещений</h2>
       {% if visits %}
@@ -67,5 +210,16 @@
       <p class="acc-note">За каждый визит начисляется 100 баллов, 1 балл = 1 ₽ скидки на любой приём. Баллы копятся автоматически.</p>
     </section>
   </main>
+  <script>
+document.querySelectorAll(".acc-progress__bar[data-progress]").forEach(function(bar) {
+    const progress = Number(bar.dataset.progress);
+
+    const safeProgress = Number.isFinite(progress)
+        ? Math.min(100, Math.max(0, progress))
+        : 0;
+
+    bar.style.width = safeProgress + "%";
+});
+</script>
 </body>
 </html>

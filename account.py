@@ -5,7 +5,7 @@ from functools import wraps
 
 from flask import (
     Blueprint, render_template, request, redirect, url_for,
-    session, flash, send_from_directory
+    session, flash, send_from_directory, abort
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -51,12 +51,63 @@ def init_db():
             amount     REAL NOT NULL DEFAULT 0,
             visit_date TEXT NOT NULL
         );
+                CREATE TABLE IF NOT EXISTS pets (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            animal_type TEXT NOT NULL,
+            breed TEXT,
+            birth_date TEXT,
+            sex TEXT DEFAULT 'Не указан',
+            weight REAL,
+            color TEXT,
+            health_notes TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+                ON DELETE CASCADE
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_pets_user_id
+        ON pets(user_id);
+                CREATE TABLE IF NOT EXISTS pet_health_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            pet_id INTEGER NOT NULL,
+            entry_date TEXT NOT NULL DEFAULT (date('now', 'localtime')),
+
+            appetite TEXT NOT NULL DEFAULT 'Обычный',
+            activity TEXT NOT NULL DEFAULT 'Обычная',
+            wellbeing TEXT NOT NULL DEFAULT 'Хорошее',
+            water_intake TEXT NOT NULL DEFAULT 'Обычное',
+
+            walked INTEGER NOT NULL DEFAULT 0,
+            played INTEGER NOT NULL DEFAULT 0,
+            medication_given INTEGER NOT NULL DEFAULT 0,
+
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY (pet_id)
+                REFERENCES pets(id)
+                ON DELETE CASCADE,
+
+            UNIQUE (pet_id, entry_date),
+
+            CHECK (appetite IN ('Слабый', 'Обычный', 'Хороший')),
+            CHECK (activity IN ('Низкая', 'Обычная', 'Высокая')),
+            CHECK (wellbeing IN ('Хорошее', 'Обычное', 'Есть изменения')),
+            CHECK (water_intake IN ('Меньше обычного', 'Обычное', 'Больше обычного')),
+
+            CHECK (walked IN (0, 1)),
+            CHECK (played IN (0, 1)),
+            CHECK (medication_given IN (0, 1))
+        );
         """)
 
 
 def get_db():
     db = sqlite3.connect(DB_PATH)
     db.row_factory = sqlite3.Row
+    db.execute("PRAGMA foreign_keys = ON")
     return db
 def current_user():
     uid = session.get("user_id")
@@ -102,8 +153,252 @@ def next_level_for(visits_count):
         if visits_count < candidate["min_visits"]:
             return candidate
     return None
+def pet_age_label(birth_date):
+    """Рассчитывает возраст питомца по дате рождения."""
+    if not birth_date:
+        return "Не указан"
+
+    try:
+        born = datetime.date.fromisoformat(birth_date)
+    except ValueError:
+        return "Не указан"
+
+    today = datetime.date.today()
+
+    years = today.year - born.year
+    months = today.month - born.month
+
+    if today.day < born.day:
+        months -= 1
+
+    if months < 0:
+        years -= 1
+        months += 12
+
+    if years > 0:
+        if months > 0:
+            return f"{years} г. {months} мес."
+        return f"{years} г."
+
+    if months > 0:
+        return f"{months} мес."
+
+    days = (today - born).days
+    return f"{days} дн." if days > 0 else "Меньше дня"
+# ===============================
+# УПРАВЛЕНИЕ ПИТОМЦАМИ
+# ===============================
+
+ANIMAL_TYPES = (
+    "Собака", "Кошка", "Грызун", "Птица", "Рептилия", "Другое"
+)
+
+PET_SEX_OPTIONS = ("Самец", "Самка", "Не указан")
 
 
+def validate_pet_form(form):
+    """Проверка данных питомца перед сохранением."""
+
+    data = {
+        "name": form.get("name", "").strip(),
+        "animal_type": form.get("animal_type", "").strip(),
+        "breed": form.get("breed", "").strip(),
+        "birth_date": form.get("birth_date", "").strip(),
+        "sex": form.get("sex", "Не указан").strip() or "Не указан",
+        "weight": form.get("weight", "").strip(),
+        "color": form.get("color", "").strip(),
+        "health_notes": form.get("health_notes", "").strip()
+    }
+
+    errors = []
+
+    if not data["name"]:
+        errors.append("Укажите кличку питомца.")
+
+    if data["animal_type"] not in ANIMAL_TYPES:
+        errors.append("Выберите вид животного.")
+
+    if data["sex"] not in PET_SEX_OPTIONS:
+        errors.append("Выберите пол животного.")
+
+    if data["birth_date"]:
+        try:
+            birth = datetime.date.fromisoformat(data["birth_date"])
+            if birth > datetime.date.today():
+                errors.append("Дата рождения не может быть в будущем.")
+        except ValueError:
+            errors.append("Проверьте дату рождения.")
+
+    weight_raw = data["weight"]
+    weight_value = None
+
+    if weight_raw:
+        try:
+            weight_value = float(weight_raw.replace(",", "."))
+            if not 0 < weight_value <= 2000:
+                errors.append("Проверьте значение веса.")
+        except ValueError:
+            errors.append("Вес должен быть указан числом.")
+
+    if len(data["name"]) > 60:
+        errors.append("Кличка слишком длинная.")
+
+    if len(data["breed"]) > 80 or len(data["color"]) > 80:
+        errors.append("Проверьте длину текста в полях породы и окраса.")
+
+    if len(data["health_notes"]) > 1000:
+        errors.append("Описание особенностей здоровья слишком длинное.")
+
+    data["weight"] = weight_raw if errors else weight_value
+
+    return data, errors
+
+
+# Добавление нового питомца
+@account_bp.route("/pets/add", methods=["GET", "POST"])
+@login_required
+def add_pet():
+    user = current_user()
+
+    if request.method == "POST":
+        pet, errors = validate_pet_form(request.form)
+
+        if errors:
+            for error in errors:
+                flash(error, "error")
+
+            return render_template(
+                "pet_form.html",
+                pet=pet,
+                is_edit=False,
+                animal_types=ANIMAL_TYPES,
+                sex_options=PET_SEX_OPTIONS,
+                today=datetime.date.today().isoformat()
+            )
+
+        with get_db() as db:
+            db.execute(
+                """
+                INSERT INTO pets
+                (user_id, name, animal_type, breed, birth_date,
+                 sex, weight, color, health_notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    user["id"],
+                    pet["name"],
+                    pet["animal_type"],
+                    pet["breed"],
+                    pet["birth_date"],
+                    pet["sex"],
+                    pet["weight"],
+                    pet["color"],
+                    pet["health_notes"]
+                )
+            )
+
+        flash("Питомец успешно добавлен!", "success")
+        return redirect(url_for("account.account_page"))
+
+    return render_template(
+        "pet_form.html",
+        pet={},
+        is_edit=False,
+        animal_types=ANIMAL_TYPES,
+        sex_options=PET_SEX_OPTIONS,
+        today=datetime.date.today().isoformat()
+    )
+
+
+# Редактирование информации о питомце
+@account_bp.route("/pets/<int:pet_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_pet(pet_id):
+    user = current_user()
+
+    with get_db() as db:
+        pet = db.execute(
+            "SELECT * FROM pets WHERE id = ? AND user_id = ?",
+            (pet_id, user["id"])
+        ).fetchone()
+
+    if pet is None:
+        abort(404)
+
+    if request.method == "POST":
+        pet_data, errors = validate_pet_form(request.form)
+
+        if errors:
+            for error in errors:
+                flash(error, "error")
+
+            return render_template(
+                "pet_form.html",
+                pet=pet_data,
+                is_edit=True,
+                pet_id=pet_id,
+                animal_types=ANIMAL_TYPES,
+                sex_options=PET_SEX_OPTIONS,
+                today=datetime.date.today().isoformat()
+            )
+
+        with get_db() as db:
+            db.execute(
+                """
+                UPDATE pets
+                SET name = ?, animal_type = ?, breed = ?,
+                    birth_date = ?, sex = ?, weight = ?,
+                    color = ?, health_notes = ?
+                WHERE id = ? AND user_id = ?
+                """,
+                (
+                    pet_data["name"],
+                    pet_data["animal_type"],
+                    pet_data["breed"],
+                    pet_data["birth_date"],
+                    pet_data["sex"],
+                    pet_data["weight"],
+                    pet_data["color"],
+                    pet_data["health_notes"],
+                    pet_id,
+                    user["id"]
+                )
+            )
+
+        flash("Данные питомца обновлены!", "success")
+        return redirect(url_for("account.account_page"))
+
+    return render_template(
+        "pet_form.html",
+        pet=dict(pet),
+        is_edit=True,
+        pet_id=pet_id,
+        animal_types=ANIMAL_TYPES,
+        sex_options=PET_SEX_OPTIONS,
+        today=datetime.date.today().isoformat()
+    )
+
+
+# Удаление питомца
+@account_bp.route("/pets/<int:pet_id>/delete", methods=["POST"])
+@login_required
+def delete_pet(pet_id):
+    user = current_user()
+
+    with get_db() as db:
+        cursor = db.execute(
+            "DELETE FROM pets WHERE id = ? AND user_id = ?",
+            (pet_id, user["id"])
+        )
+
+        deleted = cursor.rowcount
+
+    if not deleted:
+        abort(404)
+
+    flash("Питомец удалён из вашего профиля.", "success")
+
+    return redirect(url_for("account.account_page"))
 # Маршруты 
 @account_bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -187,6 +482,17 @@ def account_page():
             "SELECT service, amount, visit_date FROM visits "
             "WHERE user_id = ? ORDER BY visit_date DESC, id DESC",
             (user["id"],)).fetchall()
+        pets_rows = db.execute(
+            "SELECT * FROM pets WHERE user_id = ? ORDER BY name COLLATE NOCASE, id",
+            (user["id"],)
+        ).fetchall()
+
+        pets = []
+
+        for row in pets_rows:
+            pet = dict(row)
+            pet["age_label"] = pet_age_label(pet["birth_date"])
+            pets.append(pet)
 
     total_visits = len(visits)
     points = user["points"]
@@ -217,9 +523,157 @@ def account_page():
         next_level=nxt_data,
         progress_pct=progress_pct,
         visits=visits,
+        pets=pets,
     )
 
+# =====================================
+# ДНЕВНИК НАБЛЮДЕНИЯ ЗА ПИТОМЦЕМ
+# =====================================
 
+@account_bp.route("/pets/<int:pet_id>/diary", methods=["GET", "POST"])
+@login_required
+def pet_diary(pet_id):
+
+    user = current_user()
+    today = datetime.date.today().isoformat()
+
+    with get_db() as db:
+
+        # Проверяем, принадлежит ли питомец пользователю
+        pet = db.execute(
+            """
+            SELECT * FROM pets
+            WHERE id = ? AND user_id = ?
+            """,
+            (pet_id, user["id"])
+        ).fetchone()
+
+        if pet is None:
+            abort(404)
+
+        if request.method == "POST":
+
+            # Получаем выбранные показатели
+            appetite = request.form.get("appetite", "Обычный")
+            activity = request.form.get("activity", "Обычная")
+            wellbeing = request.form.get("wellbeing", "Хорошее")
+            water_intake = request.form.get(
+                "water_intake", "Обычное"
+            )
+
+            # Проверяем допустимые значения
+            if appetite not in ("Слабый", "Обычный", "Хороший"):
+                flash("Проверьте выбранный аппетит.", "error")
+                return redirect(url_for(
+                    "account.pet_diary", pet_id=pet_id
+                ))
+
+            if activity not in ("Низкая", "Обычная", "Высокая"):
+                flash("Проверьте уровень активности.", "error")
+                return redirect(url_for(
+                    "account.pet_diary", pet_id=pet_id
+                ))
+
+            if wellbeing not in (
+                "Хорошее", "Обычное", "Есть изменения"
+            ):
+                flash("Проверьте состояние питомца.", "error")
+                return redirect(url_for(
+                    "account.pet_diary", pet_id=pet_id
+                ))
+
+            if water_intake not in (
+                "Меньше обычного", "Обычное", "Больше обычного"
+            ):
+                flash("Проверьте потребление воды.", "error")
+                return redirect(url_for(
+                    "account.pet_diary", pet_id=pet_id
+                ))
+
+            # Считываем отметки
+            walked = 1 if request.form.get("walked") == "1" else 0
+            played = 1 if request.form.get("played") == "1" else 0
+
+            medication_given = (
+                1 if request.form.get("medication_given") == "1"
+                else 0
+            )
+
+            # Сохраняем наблюдение.
+            # Если запись за сегодня уже существует,
+            # обновляем её.
+            db.execute(
+                """
+                INSERT INTO pet_health_log (
+                    pet_id,
+                    entry_date,
+                    appetite,
+                    activity,
+                    wellbeing,
+                    water_intake,
+                    walked,
+                    played,
+                    medication_given
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+
+                ON CONFLICT(pet_id, entry_date)
+                DO UPDATE SET
+                    appetite = excluded.appetite,
+                    activity = excluded.activity,
+                    wellbeing = excluded.wellbeing,
+                    water_intake = excluded.water_intake,
+                    walked = excluded.walked,
+                    played = excluded.played,
+                    medication_given = excluded.medication_given
+                """,
+                (
+                    pet_id,
+                    today,
+                    appetite,
+                    activity,
+                    wellbeing,
+                    water_intake,
+                    walked,
+                    played,
+                    medication_given
+                )
+            )
+
+            flash("Наблюдение успешно сохранено!", "success")
+
+            return redirect(url_for(
+                "account.pet_diary",
+                pet_id=pet_id
+            ))
+
+        # Получаем сегодняшнюю запись
+        today_entry = db.execute(
+            """
+            SELECT * FROM pet_health_log
+            WHERE pet_id = ? AND entry_date = ?
+            """,
+            (pet_id, today)
+        ).fetchone()
+
+        # Получаем историю наблюдений
+        history = db.execute(
+            """
+            SELECT * FROM pet_health_log
+            WHERE pet_id = ?
+            ORDER BY entry_date DESC
+            LIMIT 30
+            """,
+            (pet_id,)
+        ).fetchall()
+
+    return render_template(
+        "pet_diary.html",
+        pet=pet,
+        today_entry=dict(today_entry) if today_entry else {},
+        history=history,
+        today=today
+    )
 @account_bp.route("/admin-mark", methods=["GET", "POST"])
 def admin_mark():
     if request.method == "POST":

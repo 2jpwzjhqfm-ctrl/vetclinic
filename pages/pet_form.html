@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if is_edit %}Редактирование питомца{% else %}Добавление питомца{% endif %}
+        — Happy Pet
+    </title>
+    <link rel="stylesheet" href="/css/account.css">
+</head>
+
+<body class="acc-page">
+
+<header class="acc-header">
+    <a class="acc-logo" href="/">🐾 Happy Pet</a>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/services">Услуги</a>
+        <a href="/account">Личный кабинет</a>
+        <a href="/logout">Выйти</a>
+    </nav>
+</header>
+
+<main class="acc-wrap acc-wrap--narrow">
+
+    <h1 class="acc-title">
+        {% if is_edit %}
+            Редактирование питомца
+        {% else %}
+            Новый питомец
+        {% endif %}
+    </h1>
+
+    <p class="acc-hello">
+        Расскажите нам немного о вашем любимце ❤️
+    </p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, msg in messages %}
+            <div class="acc-flash acc-flash--{{ category }}">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <form class="acc-card acc-form" method="post">
+
+        <label class="acc-label" for="name">Кличка питомца *</label>
+        <input class="acc-input" id="name" name="name"
+               value="{{ pet.get('name', '') }}"
+               placeholder="Например, Боня" required>
+
+        <label class="acc-label" for="animal_type">Вид животного *</label>
+        <select class="acc-input" id="animal_type" name="animal_type" required>
+            <option value="">Выберите животное</option>
+            {% for item in animal_types %}
+                <option value="{{ item }}"
+                    {% if pet.get('animal_type') == item %}selected{% endif %}>
+                    {{ item }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label class="acc-label" for="breed">Порода</label>
+        <input class="acc-input" id="breed" name="breed"
+               value="{{ pet.get('breed', '') }}"
+               placeholder="Например, лабрадор">
+
+        <label class="acc-label" for="birth_date">Дата рождения</label>
+        <input class="acc-input" type="date" id="birth_date"
+               name="birth_date" max="{{ today }}"
+               value="{{ pet.get('birth_date', '') }}">
+
+        <label class="acc-label" for="sex">Пол</label>
+        <select class="acc-input" id="sex" name="sex">
+            {% for option in sex_options %}
+                <option value="{{ option }}"
+                    {% if pet.get('sex', 'Не указан') == option %}selected{% endif %}>
+                    {{ option }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label class="acc-label" for="weight">Вес (кг)</label>
+        <input class="acc-input" type="number" id="weight"
+               name="weight" min="0.01" max="2000" step="0.01"
+               value="{{ pet.get('weight') if pet.get('weight') is not none else '' }}"
+               placeholder="Например, 4.5">
+
+        <label class="acc-label" for="color">Окрас</label>
+        <input class="acc-input" id="color" name="color"
+               value="{{ pet.get('color', '') }}"
+               placeholder="Например, белый">
+
+        <label class="acc-label" for="health_notes">
+            Особенности здоровья
+        </label>
+        <textarea class="acc-input acc-textarea"
+                  id="health_notes" name="health_notes"
+                  rows="4"
+                  placeholder="Аллергии и другие важные особенности">{{ pet.get('health_notes', '') }}</textarea>
+
+        <button class="acc-btn" type="submit">
+            {% if is_edit %}
+                Сохранить изменения
+            {% else %}
+                Добавить питомца
+            {% endif %}
+        </button>
+
+        <a class="acc-cancel-link"
+           href="{{ url_for('account.account_page') }}">
+            Вернуться в личный кабинет
+        </a>
+
+        <p class="acc-note">
+            * Обязательные поля
+        </p>
+
+    </form>
+</main>
+
+</body>
+</html>
