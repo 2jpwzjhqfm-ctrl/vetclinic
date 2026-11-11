@@ -525,7 +525,44 @@ def account_page():
         visits=visits,
         pets=pets,
     )
+# =====================================
+# САМОСТОЯТЕЛЬНАЯ ОТМЕТКА ВИЗИТА
+# =====================================
 
+@account_bp.route("/visit/add", methods=["POST"])
+@login_required
+def add_visit():
+    """Пользователь сам отмечает свой визит в клинике."""
+    service = request.form.get("service", "").strip()
+    amount_raw = request.form.get("amount", "").strip()
+    date_raw = request.form.get("visit_date", "").strip()
+
+    if not service:
+        flash("Укажите услугу.", "error")
+        return redirect(url_for("account.account_page"))
+
+    try:
+        amount = float(amount_raw.replace(",", ".")) if amount_raw else 0.0
+        assert amount >= 0
+    except Exception:
+        flash("Сумма должна быть неотрицательным числом.", "error")
+        return redirect(url_for("account.account_page"))
+
+    visit_date = date_raw or datetime.date.today().isoformat()
+
+    user = current_user()
+    with get_db() as db:
+        db.execute(
+            "INSERT INTO visits (user_id, service, amount, visit_date) "
+            "VALUES (?, ?, ?, ?)",
+            (user["id"], service, amount, visit_date))
+        db.execute(
+            "UPDATE users SET points = points + ? WHERE id = ?",
+            (POINTS_PER_VISIT, user["id"]))
+
+    flash("Визит отмечен: {} (+{} баллов)".format(
+        service, POINTS_PER_VISIT), "success")
+    return redirect(url_for("account.account_page"))
 # =====================================
 # ДНЕВНИК НАБЛЮДЕНИЯ ЗА ПИТОМЦЕМ
 # =====================================
