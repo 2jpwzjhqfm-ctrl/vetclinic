@@ -47,6 +47,37 @@
         <p class="acc-progress__hint">У вас максимальный статус — скидка {{ discount }}% 🎉</p>
       {% endif %}
     </section>
+<section class="card">
+    <h2>Отметить визит 🐾</h2>
+    <p>Были на приёме? Отметьте визит — начислим баллы и пересчитаем скидку.</p>
+    <form method="post" action="/visit/add">
+        <label>
+            Услуга
+            <input type="text" name="service" required placeholder="Например: Вакцинация">
+        </label>
+        <label>
+            Сумма, ₽
+            <input type="number" name="amount" min="0" step="0.01" placeholder="0">
+        </label>
+        <label>
+            Дата визита
+            <input type="date" name="visit_date">
+        </label>
+        <button type="submit">Отметить визит</button>
+    </form>
+</section>
+<section class="card">
+    <h2>История визитов</h2>
+    {% if visits %}
+        <ul>
+        {% for v in visits %}
+            <li>{{ v.visit_date }} — {{ v.service }} — {{ "%.0f" | format(v.amount) }} ₽</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Визитов пока нет — отметьте первый, чтобы копить баллы!</p>
+    {% endif %}
+</section>
 
     <!-- МОИ ПИТОМЦЫ -->
 <section class="acc-card acc-pets-section">
