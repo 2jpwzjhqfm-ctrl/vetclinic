@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Клиенты — Happy Pet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/specialists.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        th {
+            background: #1258b8;
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #333;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+    <header class="header">
+        <div class="logo">
+            <span class="logo-paw">✣</span>
+            <span>HAPPY PET</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="/">Главная</a>
+            <a href="/services">Услуги</a>
+            <a href="/specialists">Специалисты</a>
+            <a href="/appointment">Запись</a>
+            <a href="/contacts">Контакты</a>
+            <a href="/admin/clients">Клиенты</a>
+        </nav>
+    </header>
+
+    <section class="intro" style="padding: 50px;">
+        <p class="section-label">АДМИНИСТРИРОВАНИЕ</p>
+        <h2>Список клиентов</h2>
+        <p class="intro-text">Все записи, оставленные через форму на сайте.</p>
+
+        {% if clients %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Питомец</th>
+                    <th>Вид/Порода</th>
+                    <th>Владелец</th>
+                    <th>Телефон</th>
+                    <th>Причина</th>
+                    <th>Время</th>
+                    <th>Дата записи</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td>{{ client[0] }}</td>
+                    <td>{{ client[1] }}</td>
+                    <td>{{ client[2] }}</td>
+                    <td>{{ client[3] }}</td>
+                    <td>{{ client[4] }}</td>
+                    <td>{{ client[5] }}</td>
+                    <td>{{ client[6] }}</td>
+                    <td>{{ client[7] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty">Пока нет ни одной записи. Заполните форму на странице "Запись".</p>
+        {% endif %}
+    </section>
+</div>
+</body>
+</html>
