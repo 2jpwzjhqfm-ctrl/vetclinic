@@ -509,3 +509,38 @@
         font-size: 13px;
     }
 }
+/* ===== Прививки и обработки ===== */
+
+.acc-form p {
+    margin: 0 0 14px;
+}
+
+.acc-form input,
+.acc-form textarea {
+    width: 100%;
+    max-width: 420px;
+    padding: 10px 12px;
+    border: 1px solid #d7e0dd;
+    border-radius: 10px;
+    margin-top: 6px;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.acc-form input:focus,
+.acc-form textarea:focus {
+    outline: 2px solid #1d8a74;
+    border-color: #1d8a74;
+}
+
+.acc-vac--overdue {
+    border: 2px solid #d9534f;
+}
+
+.acc-vac--soon {
+    border: 2px solid #f0ad4e;
+}
+
+.acc-vac--ok {
+    border: 1px solid #d7e0dd;
+}
