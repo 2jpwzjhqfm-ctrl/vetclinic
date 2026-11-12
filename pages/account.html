@@ -20,7 +20,18 @@
   <main class="acc-wrap">
     <h1 class="acc-title">Личный кабинет</h1>
     <p class="acc-hello">Привет, {{ user["name"] }}!</p>
-
+{% if reminders %}
+<section style="background:#fff8e6; border:1px solid #f0ad4e; border-radius:12px; padding:16px; margin-bottom:20px;">
+    <h2>Требует внимания 💉</h2>
+    {% for r in reminders %}
+        <p>
+            {% if r.status.code == 'overdue' %}🔴 {% else %}⚠️ {% endif %}
+            {{ r.pet_name }}: {{ r.vaccine_name }} — {{ r.status.label }}
+            (<a href="/pets/{{ r.pet_id }}/vaccinations">открыть</a>)
+        </p>
+    {% endfor %}
+</section>
+{% endif %}
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% for category, msg in messages %}
         <div class="acc-flash acc-flash--{{ category }}">{{ msg }}</div>
@@ -174,6 +185,12 @@
                          href="{{ url_for('account.pet_diary', pet_id=pet['id']) }}">
                             📖 Дневник питомца
                       </a>
+                      </a>
+
+                        <a class="acc-small-btn"
+                           href="{{ url_for('account.pet_vaccinations', pet_id=pet['id']) }}">
+                            💉 Прививки
+                        </a>
 
                         <a class="acc-small-btn"
                            href="{{ url_for('account.edit_pet', pet_id=pet['id']) }}">
