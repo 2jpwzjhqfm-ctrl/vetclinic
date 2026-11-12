@@ -101,6 +101,16 @@ def init_db():
             CHECK (played IN (0, 1)),
             CHECK (medication_given IN (0, 1))
         );
+        CREATE TABLE IF NOT EXISTS vaccinations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pet_id INTEGER NOT NULL,
+            vaccine_name TEXT NOT NULL,
+            date_done TEXT NOT NULL,
+            next_date TEXT,
+            notes TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE
+        );
         """)
 
 
@@ -185,6 +195,28 @@ def pet_age_label(birth_date):
 
     days = (today - born).days
     return f"{days} дн." if days > 0 else "Меньше дня"
+# =====================================
+# ПРИВИВКИ И ОБРАБОТКИ
+# =====================================
+
+SOON_DAYS = 30  # за сколько дней предупреждать
+
+def vaccination_status(next_date_str):
+    """Статус прививки по дате следующей процедуры."""
+    if not next_date_str:
+        return {"code": "ok", "label": "Актуально", "days_left": None}
+    try:
+        next_date = datetime.date.fromisoformat(next_date_str)
+    except ValueError:
+        return {"code": "ok", "label": "Актуально", "days_left": None}
+    days = (next_date - datetime.date.today()).days
+    if days < 0:
+        return {"code": "overdue", "label": "Просрочено", "days_left": days}
+    if days <= SOON_DAYS:
+        return {"code": "soon",
+                "label": "Скоро (через {} дн.)".format(days),
+                "days_left": days}
+    return {"code": "ok", "label": "Актуально", "days_left": days}
 # ===============================
 # УПРАВЛЕНИЕ ПИТОМЦАМИ
 # ===============================
@@ -494,6 +526,23 @@ def account_page():
             pet["age_label"] = pet_age_label(pet["birth_date"])
             pets.append(pet)
 
+        vac_rows = db.execute(
+            "SELECT v.*, p.name AS pet_name FROM vaccinations v "
+            "JOIN pets p ON p.id = v.pet_id "
+            "WHERE p.user_id = ? "
+            "ORDER BY v.next_date IS NULL, v.next_date",
+            (user["id"],)).fetchall()
+
+    reminders = []
+    for row in vac_rows:
+        v = dict(row)
+        v["status"] = vaccination_status(v["next_date"])
+        if v["status"]["code"] in ("soon", "overdue"):
+            reminders.append(v)
+    reminders.sort(key=lambda v: (
+        v["status"]["code"] != "overdue",
+        v["status"]["days_left"] if v["status"]["days_left"] is not None else 9999))
+
     total_visits = len(visits)
     points = user["points"]
     level = level_for(total_visits)
@@ -524,6 +573,7 @@ def account_page():
         progress_pct=progress_pct,
         visits=visits,
         pets=pets,
+        reminders=reminders,
     )
 # =====================================
 # САМОСТОЯТЕЛЬНАЯ ОТМЕТКА ВИЗИТА
@@ -711,6 +761,91 @@ def pet_diary(pet_id):
         history=history,
         today=today
     )
+# =====================================
+# ПРИВИВКИ И ОБРАБОТКИ ПИТОМЦА
+# =====================================
+
+@account_bp.route("/pets/<int:pet_id>/vaccinations", methods=["GET", "POST"])
+@login_required
+def pet_vaccinations(pet_id):
+    user = current_user()
+
+    with get_db() as db:
+        pet = db.execute(
+            "SELECT * FROM pets WHERE id = ? AND user_id = ?",
+            (pet_id, user["id"])).fetchone()
+        if pet is None:
+            abort(404)
+
+        if request.method == "POST":
+            name = request.form.get("vaccine_name", "").strip()
+            date_done = request.form.get("date_done", "").strip()
+            next_date = request.form.get("next_date", "").strip()
+            notes = request.form.get("notes", "").strip()
+
+            errors = []
+            if not name:
+                errors.append("Укажите название вакцины или процедуры.")
+            if date_done:
+                try:
+                    d = datetime.date.fromisoformat(date_done)
+                    if d > datetime.date.today():
+                        errors.append("Дата процедуры не может быть в будущем.")
+                except ValueError:
+                    errors.append("Проверьте дату процедуры.")
+            else:
+                date_done = datetime.date.today().isoformat()
+            if next_date:
+                try:
+                    datetime.date.fromisoformat(next_date)
+                except ValueError:
+                    errors.append("Проверьте дату следующей процедуры.")
+
+            if errors:
+                for e in errors:
+                    flash(e, "error")
+            else:
+                db.execute(
+                    "INSERT INTO vaccinations "
+                    "(pet_id, vaccine_name, date_done, next_date, notes) "
+                    "VALUES (?, ?, ?, ?, ?)",
+                    (pet_id, name, date_done, next_date or None, notes or None))
+                flash("Прививка добавлена!", "success")
+                return redirect(url_for("account.pet_vaccinations", pet_id=pet_id))
+
+        rows = db.execute(
+            "SELECT * FROM vaccinations WHERE pet_id = ? "
+            "ORDER BY date_done DESC, id DESC",
+            (pet_id,)).fetchall()
+
+    vaccinations = []
+    for row in rows:
+        v = dict(row)
+        v["status"] = vaccination_status(v["next_date"])
+        vaccinations.append(v)
+
+    return render_template(
+        "pet_vaccinations.html", pet=pet, vaccinations=vaccinations)
+
+
+@account_bp.route("/vaccinations/<int:vac_id>/delete", methods=["POST"])
+@login_required
+def delete_vaccination(vac_id):
+    user = current_user()
+    with get_db() as db:
+        row = db.execute(
+            "SELECT v.pet_id FROM vaccinations v "
+            "JOIN pets p ON p.id = v.pet_id "
+            "WHERE v.id = ? AND p.user_id = ?",
+            (vac_id, user["id"])).fetchone()
+        if row is None:
+            abort(404)
+        pet_id = row["pet_id"]
+        db.execute("DELETE FROM vaccinations WHERE id = ?", (vac_id,))
+
+    flash("Запись о прививке удалена.", "success")
+    return redirect(url_for("account.pet_vaccinations", pet_id=pet_id))
+
 @account_bp.route("/admin-mark", methods=["GET", "POST"])
 def admin_mark():
     if request.method == "POST":
