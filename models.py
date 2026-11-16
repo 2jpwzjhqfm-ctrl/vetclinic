@@ -1,14 +1,14 @@
 from database import get_connection
 
-def add_client(pet_name, pet_type, owner_name, phone, reason, preferred_time):
+def add_client(pet_name, pet_type, owner_name, phone, reason, preferred_time, doctor):
     """Добавляет нового клиента в базу данных."""
     conn = get_connection()
     cursor = conn.cursor()
     
     cursor.execute('''
-        INSERT INTO clients (pet_name, pet_type, owner_name, phone, reason, preferred_time)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', (pet_name, pet_type, owner_name, phone, reason, preferred_time))
+        INSERT INTO clients (pet_name, pet_type, owner_name, phone, reason, preferred_time, doctor)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (pet_name, pet_type, owner_name, phone, reason, preferred_time, doctor))
     
     conn.commit()
     conn.close()

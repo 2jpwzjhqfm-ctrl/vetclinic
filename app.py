@@ -126,6 +126,7 @@ def add_client_route():
     phone = request.form.get("phone")
     reason = request.form.get("reason", "")
     preferred_time = request.form.get("preferred_time", "")
+    doctor = request.form.get("doctor", "Любой врач")
 
     if pet_name and owner_name and phone:
         add_client(
@@ -134,7 +135,8 @@ def add_client_route():
             owner_name,
             phone,
             reason,
-            preferred_time
+            preferred_time,
+            doctor
         )
 
     return redirect(url_for("admin_clients"))
@@ -151,4 +153,4 @@ def admin_clients():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5007)
