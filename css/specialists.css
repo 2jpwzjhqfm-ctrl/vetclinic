@@ -482,3 +482,48 @@ a {
         font-size: 52px;
     }
 }
+/* ===== СТИЛИ ДЛЯ НОВОЙ ШАПКИ ===== */
+.header {
+    background: #fff;
+    border-bottom: 1px solid #e8e3da;
+    position: relative;
+    z-index: 10;
+}
+
+.header-content {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #263238;
+    text-decoration: none;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav a {
+    font-size: 13px;
+    font-weight: 500;
+    color: #263238;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav a:hover {
+    color: #5b9caf;
+}
