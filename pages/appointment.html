@@ -152,10 +152,18 @@
     <!-- Основной контент -->
     <main class="content-wrapper">
         <div class="appointment-form-wrapper">
-            <h1>Запись на прием</h1>
+            <h1>Запись на прием</h1> <!-- Блок для отображения выбранного врача -->
+{% if request.args.get('doctor') %}
+<div style="background-color: #e9f2ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border-left: 4px solid #1258b8;">
+    <p style="margin: 0; font-size: 16px; color: #333;">
+        Вы записываетесь к: <strong>{{ request.args.get('doctor') }}</strong>
+    </p>
+</div>
+{% endif %}
             <p class="subtitle">Заполните форму, и мы свяжемся с вами для подтверждения времени визита.</p>
 
             <form action="/add_client" method="POST">
+                <input type="hidden" name="doctor" value="{{ request.args.get('doctor', 'Любой врач') }}">
     <div class="form-group">
         <label for="pet-name">Имя питомца</label>
         <input type="text" id="pet-name" name="pet_name" class="form-control" placeholder="Например: Барсик" required>

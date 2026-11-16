@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/specialists.css">
-    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-
-<header class="header">
+<div class="page-wrapper">
+    <header class="header">
     <div class="container header-content">
         <a href="/" class="logo">Happy Pet</a>
+
         <nav class="nav">
             <a href="/">О клинике</a>
             <a href="/services">Услуги</a>
@@ -25,10 +26,7 @@
     </div>
 </header>
 
-<div class="page-wrapper">
-
     <section class="hero">
-
         <div class="hero-text">
             <p class="small-title">ВЕТЕРИНАРНАЯ КЛИНИКА HAPPY PET</p>
             <h1>НАШИ<br><span>ВРАЧИ</span></h1>
@@ -36,10 +34,10 @@
                 Команда опытных специалистов, которые любят животных
                 и постоянно повышают свою квалификацию
             </p>
-            <a href="/contacts" class="blue-button">Записаться на приём</a>
+            <a href="/appointment" class="blue-button">Записаться на приём</a>
         </div>
         <div class="hero-image">
-            <img src="/Images/doctors-hero.jpg" alt="Ветеринарный врач с собакой">
+            <img src="/images/doctors-hero.jpg" alt="Ветеринарный врач с собакой">
         </div>
     </section>
 
@@ -54,68 +52,58 @@
     </section>
 
     <section class="doctors">
-
         <article class="doctor-card">
             <div class="doctor-image">
-                <img src="/Images/doctor1.jpg" alt="Анна Смирнова">
+                <img src="/images/doctor1.jpg" alt="Анна Смирнова">
             </div>
             <div class="doctor-content">
                 <span class="doctor-spec">ТЕРАПЕВТ</span>
                 <h3>Анна Смирнова</h3>
-                <p>
-                    Стаж 12 лет. Специализируется на диагностике,
-                    лечении внутренних заболеваний и вакцинации.
-                </p>
+                <p>Стаж 12 лет. Специализируется на диагностике, лечении внутренних заболеваний и вакцинации.</p>
+                <a href="/appointment?doctor=Анна Смирнова" class="blue-button" style="margin-top: 15px; display: inline-block;">Записаться</a>
             </div>
         </article>
 
         <article class="doctor-card">
             <div class="doctor-image">
-                <img src="/Images/doctor2.jpg" alt="Иван Петров">
+                <img src="/images/doctor2.jpg" alt="Иван Петров">
             </div>
             <div class="doctor-content">
                 <span class="doctor-spec">ХИРУРГ</span>
                 <h3>Иван Петров</h3>
-                <p>
-                    Стаж 15 лет. Проводит плановые и экстренные операции,
-                    специалист по травматологии.
-                </p>
+                <p>Стаж 15 лет. Проводит плановые и экстренные операции, специалист по травматологии.</p>
+                <a href="/appointment?doctor=Иван Петров" class="blue-button" style="margin-top: 15px; display: inline-block;">Записаться</a>
             </div>
         </article>
 
         <article class="doctor-card">
             <div class="doctor-image">
-                <img src="/Images/doctor3.jpg" alt="Елена Козлова">
+                <img src="/images/doctor3.jpg" alt="Елена Козлова">
             </div>
             <div class="doctor-content">
                 <span class="doctor-spec">ДЕРМАТОЛОГ</span>
                 <h3>Елена Козлова</h3>
-                <p>
-                    Стаж 8 лет. Занимается диагностикой и лечением
-                    кожных заболеваний, аллергий и дерматитов.
-                </p>
+                <p>Стаж 8 лет. Занимается диагностикой и лечением кожных заболеваний, аллергий и дерматитов.</p>
+                <a href="/appointment?doctor=Елена Козлова" class="blue-button" style="margin-top: 15px; display: inline-block;">Записаться</a>
             </div>
         </article>
 
         <article class="doctor-card">
             <div class="doctor-image">
-                <img src="/Images/doctor4.jpg" alt="Дмитрий Волков">
+                <img src="/images/doctor4.jpg" alt="Дмитрий Волков">
             </div>
             <div class="doctor-content">
                 <span class="doctor-spec">СТОМАТОЛОГ</span>
                 <h3>Дмитрий Волков</h3>
-                <p>
-                    Стаж 10 лет. Проводит профессиональную гигиену
-                    полости рта и лечит заболевания зубов и дёсен.
-                </p>
+                <p>Стаж 10 лет. Проводит профессиональную гигиену полости рта и лечит заболевания зубов и дёсен.</p>
+                <a href="/appointment?doctor=Дмитрий Волков" class="blue-button" style="margin-top: 15px; display: inline-block;">Записаться</a>
             </div>
         </article>
-
     </section>
 
     <section class="why-us">
         <div class="why-image">
-            <img src="/Images/doctors-team.jpg" alt="Команда Happy Pet">
+            <img src="/images/doctors-team.jpg" alt="Команда Happy Pet">
         </div>
         <div class="why-content">
             <p class="section-label">ПОЧЕМУ HAPPY PET</p>
@@ -139,7 +127,7 @@
         <p class="section-label">HAPPY PET</p>
         <h2>ЗАПИШИТЕСЬ<br>НА ПРИЁМ</h2>
         <p>Мы поможем подобрать удобное время для посещения ветеринарного врача.</p>
-        <a href="/contacts" class="blue-button">Записаться на приём</a>
+        <a href="/appointment" class="blue-button">Записаться на приём</a>
     </section>
 
     <footer class="footer">
@@ -149,7 +137,6 @@
         </div>
         <p>© 2026 Happy Pet. Ветеринарная клиника</p>
     </footer>
-
 </div>
 </body>
 </html>
