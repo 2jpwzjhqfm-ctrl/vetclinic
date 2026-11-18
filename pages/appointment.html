@@ -53,15 +53,16 @@
             <h1>Запись на прием</h1>
             <p class="subtitle">Заполните форму, и мы свяжемся с вами для подтверждения времени визита.</p>
 
-            <!-- Блок с ошибками (если время занято) -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div style="color: red; text-align: center; margin-bottom: 15px; font-weight: bold;">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-
+            <!-- Блок вывода ошибки (если время занято) -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div style="color: #d32f2f; background-color: #ffebee; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; border-left: 4px solid #d32f2f;">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
             <form action="/add_client" method="POST">
                 
                 <!-- ВЫБОР ВРАЧА (Выпадающий список) -->
