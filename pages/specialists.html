@@ -51,6 +51,34 @@
         </p>
     </section>
 
+<!-- Блок с фильтрами и заголовком -->
+<section class="catalog-section">
+    <div class="container">
+        <p class="section-label" style="text-align: center;">НАШ КАТАЛОГ</p>
+        <h2 style="text-align: center; margin-bottom: 20px;">НАЙДИТЕ НУЖНОГО ВРАЧА</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Ищите специалистов по имени или фильтруйте по их специализации.
+        </p>
+
+        <div class="filters" style="display: flex; gap: 20px; margin: 0 auto 40px; flex-wrap: wrap; justify-content: center; max-width: 800px;">
+            <div style="flex: 1; min-width: 250px;">
+                <label style="font-size: 12px; text-transform: uppercase; color: #666; margin-bottom: 5px; display: block;">Поиск по имени</label>
+                <input type="text" id="search-doctor" class="form-control" placeholder="Например, Анна" style="width: 100%; padding: 12px; border: 1px solid #e1e1e1; border-radius: 8px;">
+            </div>
+            <div style="flex: 1; min-width: 250px;">
+                <label style="font-size: 12px; text-transform: uppercase; color: #666; margin-bottom: 5px; display: block;">Специализация</label>
+                <select id="filter-spec" class="form-control" style="width: 100%; padding: 12px; border: 1px solid #e1e1e1; border-radius: 8px;">
+                    <option value="all">Все специализации</option>
+                    <option value="ТЕРАПЕВТ">Терапевт</option>
+                    <option value="ХИРУРГ">Хирург</option>
+                    <option value="ДЕРМАТОЛОГ">Дерматолог</option>
+                    <option value="СТОМАТОЛОГ">Стоматолог</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
     <section class="doctors">
         <article class="doctor-card">
             <div class="doctor-image">
@@ -138,5 +166,40 @@
         <p>© 2026 Happy Pet. Ветеринарная клиника</p>
     </footer>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('search-doctor');
+        const specFilter = document.getElementById('filter-spec');
+        const doctorsContainer = document.querySelector('.doctors');
+
+        // Получаем все карточки врачей
+        const doctorCards = Array.from(doctorsContainer.querySelectorAll('.doctor-card'));
+
+        // Функция для фильтрации
+        function filterDoctors() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const specValue = specFilter.value;
+
+            doctorCards.forEach(card => {
+                const name = card.querySelector('h3').innerText.toLowerCase();
+                const spec = card.querySelector('.doctor-spec').innerText;
+                
+                const matchesSearch = name.includes(searchTerm);
+                const matchesSpec = (specValue === 'all' || spec === specValue);
+                
+                // Показываем карточку, если она подходит по обоим критериям
+                if (matchesSearch && matchesSpec) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Добавляем обработчики событий
+        searchInput.addEventListener('input', filterDoctors);
+        specFilter.addEventListener('change', filterDoctors);
+    });
+</script>
 </body>
 </html>
