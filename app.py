@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from database import init_db, get_connection
 from models import add_client, get_all_clients
 from account import account_bp, init_db as init_account_db
+from flask import Flask, render_template, request, redirect, url_for, flash
+from models import add_client, get_all_clients, is_time_busy
 
 app = Flask(
     __name__,
@@ -135,7 +137,12 @@ def add_client_route():
     preferred_time = request.form.get("preferred_time", "")
     doctor = request.form.get("doctor", "Любой врач")
 
-    if pet_name and owner_name and phone:
+    if pet_name and owner_name and phone and preferred_time:
+        # Проверка на занятость времени
+        if is_time_busy(doctor, preferred_time):
+            flash(f"Увы, {doctor} уже занят(а) в это время. Выберите другое.", "error")
+            return redirect(url_for("appointment", doctor=doctor))
+        
         add_client(
             pet_name,
             pet_type,

@@ -23,3 +23,12 @@ def get_all_clients():
     
     conn.close()
     return clients
+
+def is_time_busy(doctor, preferred_time):
+    """Проверяет, занято ли это время у этого врача."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE doctor = ? AND preferred_time = ?', (doctor, preferred_time))
+    result = cursor.fetchone()
+    conn.close()
+    return result is not None
