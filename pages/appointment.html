@@ -7,213 +7,156 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* --- ЛОКАЛЬНЫЕ СТИЛИ ТОЛЬКО ДЛЯ СТРАНИЦЫ ЗАПИСИ --- */
+        body { background-color: #fffdf5; }
+        .content-wrapper { flex: 1; padding-top: 60px; padding-bottom: 40px; display: flex; justify-content: center; }
+        .appointment-form-wrapper { background-color: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); width: 100%; max-width: 700px; }
+        h1 { font-size: 2.5rem; font-weight: 100; letter-spacing: 1px; text-transform: uppercase; color: #333; margin-bottom: 10px; text-align: center; }
+        .subtitle { color: #666; margin-bottom: 40px; text-align: center; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 600; color: #333; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-control { width: 100%; padding: 16px; border: 1px solid #e1e1e1; border-radius: 8px; font-size: 16px; color: #333; background-color: #fafafa; box-sizing: border-box; transition: all 0.3s ease; }
+        .form-control:focus { outline: none; border-color: #1258b8; background-color: #fff; box-shadow: 0 0 0 3px rgba(18, 88, 184, 0.1); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .btn-primary { width: 100%; padding: 18px; background-color: #1258b8; color: #fff; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3); }
         
-        /* 1. Бежевый фон всей страницы */
-        body {
-            background-color: #fffdf5; 
-        }
-
-        /* Контейнер для центрирования контента по вертикали и горизонтали */
-        .content-wrapper {
-            flex: 1;
-            padding-top: 60px;
-            padding-bottom: 40px;
-            display: flex;
-            justify-content: center; /* Центрируем форму по горизонтали */
-        }
-
-        /* Белая карточка формы */
-        .appointment-form-wrapper {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Легкая тень */
-            width: 100%;
-            max-width: 700px;
-        }
-
-        /* Заголовок формы */
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 100;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .subtitle {
-            color: #666;
-            margin-bottom: 40px;
-            text-align: center;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Поля ввода */
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #333;
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 16px;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 16px;
-            color: #333;
-            background-color: #fafafa; /* Светло-серый фон по умолчанию */
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            background-color: #fff; /* Белый фон при фокусе */
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        /* Сетка для двух колонок (Имя / Телефон) */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        /* Кнопка отправки */
-        .btn-primary {
-            width: 100%;
-            padding: 18px;
-            background-color: var(--primary-color);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
-        }
-
-        /* Адаптив для мобильных устройств */
+        /* Стили для блока специализации */
+        #doctor-info { background-color: #e9f2ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1258b8; display: none; }
+        
         @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .appointment-form-wrapper {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
+            .form-row { grid-template-columns: 1fr; }
+            .appointment-form-wrapper { padding: 20px; }
+            h1 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
     <!-- Шапка сайта -->
-
-    
-<header class="header">
-    <div class="container header-content">
-        <a href="/" class="logo">Happy Pet</a>
-
-        <nav class="nav">
-            <a href="/">О клинике</a>
-            <a href="/services">Услуги</a>
-            <a href="/specialists">Специалисты</a>
-            <a href="/contacts">Контакты</a>
-            <a href="/register">Регистрация</a>
-            <a href="/login">Личный кабинет</a>
-        </nav>
-    </div>
-</header>
-
-
-
+    <header class="header">
+        <div class="container header-content">
+            <a href="/" class="logo">Happy Pet</a>
+            <nav class="nav">
+                <a href="/">О клинике</a>
+                <a href="/services">Услуги</a>
+                <a href="/specialists">Специалисты</a>
+                <a href="/contacts">Контакты</a>
+                <a href="/register">Регистрация</a>
+                <a href="/login">Личный кабинет</a>
+            </nav>
+        </div>
+    </header>
 
     <!-- Основной контент -->
     <main class="content-wrapper">
         <div class="appointment-form-wrapper">
-            <h1>Запись на прием</h1> <!-- Блок для отображения выбранного врача -->
-{% if request.args.get('doctor') %}
-<div style="background-color: #e9f2ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border-left: 4px solid #1258b8;">
-    <p style="margin: 0; font-size: 16px; color: #333;">
-        Вы записываетесь к: <strong>{{ request.args.get('doctor') }}</strong>
-    </p>
-</div>
-{% endif %}
+            <h1>Запись на прием</h1>
             <p class="subtitle">Заполните форму, и мы свяжемся с вами для подтверждения времени визита.</p>
 
+            <!-- Блок с ошибками (если время занято) -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="color: red; text-align: center; margin-bottom: 15px; font-weight: bold;">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
             <form action="/add_client" method="POST">
-                <input type="hidden" name="doctor" value="{{ request.args.get('doctor', 'Любой врач') }}">
-    <div class="form-group">
-        <label for="pet-name">Имя питомца</label>
-        <input type="text" id="pet-name" name="pet_name" class="form-control" placeholder="Например: Барсик" required>
-    </div>
+                
+                <!-- ВЫБОР ВРАЧА (Выпадающий список) -->
+                <div class="form-group">
+                    <label for="doctor-select">Выберите специалиста</label>
+                    <select id="doctor-select" name="doctor" class="form-control" onchange="updateDoctorInfo()">
+                        <option value="Любой врач">Любой врач (порекомендуем сами)</option>
+                        {% for name, spec in doctors_list.items() %}
+                            <option value="{{ name }}" {% if doctor == name %}selected{% endif %}>{{ name }} ({{ spec.split('(')[0] }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-    <div class="form-group">
-        <label for="pet-type">Вид и порода</label>
-        <input type="text" id="pet-type" name="pet_type" class="form-control" placeholder="Например: Кошка, Британская" required>
-    </div>
+                <!-- БЛОК ДЛЯ ОТОБРАЖЕНИЯ СПЕЦИАЛИЗАЦИИ -->
+                <div id="doctor-info">
+                    <p style="margin: 0; font-size: 14px; color: #333;">
+                        <strong>Специализация:</strong> <span id="doctor-spec-text"></span>
+                    </p>
+                </div>
 
-    <div class="form-row">
-        <div class="form-group">
-            <label for="owner-name">Ваше имя</label>
-            <input type="text" id="owner-name" name="owner_name" class="form-control" placeholder="Иван Иванов" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Телефон</label>
-            <input type="tel" id="phone" name="phone" class="form-control" placeholder="+7 (999) 000-00-00" required>
-        </div>
-    </div>
+                <!-- ПОЛЯ ФОРМЫ -->
+                <div class="form-group">
+                    <label for="pet-name">Имя питомца</label>
+                    <input type="text" id="pet-name" name="pet_name" class="form-control" placeholder="Например: Барсик" required>
+                </div>
 
-    <div class="form-group">
-        <label for="reason">Причина обращения / Симптомы</label>
-        <textarea id="reason" name="reason" class="form-control" rows="4" placeholder="Кратко опишите состояние питомца..."></textarea>
-    </div>
+                <div class="form-group">
+                    <label for="pet-type">Вид и порода</label>
+                    <input type="text" id="pet-type" name="pet_type" class="form-control" placeholder="Например: Кошка, Британская" required>
+                </div>
 
-    <div class="form-group">
-        <label for="preferred-time">Предпочтительное время приема</label>
-        <select id="preferred-time" name="preferred_time" class="form-control">
-            <option value="">Выберите время</option>
-            <option value="09:00-11:00">09:00 - 11:00</option>
-            <option value="11:00-13:00">11:00 - 13:00</option>
-            <option value="13:00-15:00">13:00 - 15:00</option>
-            <option value="15:00-17:00">15:00 - 17:00</option>
-            <option value="17:00-19:00">17:00 - 19:00</option>
-            <option value="19:00-21:00">19:00 - 21:00</option>
-        </select>
-    </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="owner-name">Ваше имя</label>
+                        <input type="text" id="owner-name" name="owner_name" class="form-control" placeholder="Иван Иванов" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="+7 (999) 000-00-00" required>
+                    </div>
+                </div>
 
-    <button type="submit" class="btn-primary">Отправить заявку</button>
-</form>
+                <div class="form-group">
+                    <label for="reason">Причина обращения / Симптомы</label>
+                    <textarea id="reason" name="reason" class="form-control" rows="4" placeholder="Кратко опишите состояние питомца..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="preferred-time">Предпочтительное время приема</label>
+                    <select id="preferred-time" name="preferred_time" class="form-control" required>
+                        <option value="">Выберите время</option>
+                        <option value="09:00-11:00">09:00 - 11:00</option>
+                        <option value="11:00-13:00">11:00 - 13:00</option>
+                        <option value="13:00-15:00">13:00 - 15:00</option>
+                        <option value="15:00-17:00">15:00 - 17:00</option>
+                        <option value="17:00-19:00">17:00 - 19:00</option>
+                        <option value="19:00-21:00">19:00 - 21:00</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">Отправить заявку</button>
+            </form>
         </div>
     </main>
 
     <!-- Подвал сайта -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2023 Happy Pet. Все права защищены.</p>
+        </p>&copy; 2026 Happy Pet. Все права защищены.</p>
         </div>
     </footer>
 
+    <!-- СКРИПТ ДЛЯ ОБНОВЛЕНИЯ ИНФОРМАЦИИ О ВРАЧЕ -->
+    <script>
+        // Данные о специализациях (передаем из Python в JS)
+        const doctorsData = {{ doctors_list | tojson }};
+        
+        function updateDoctorInfo() {
+            const select = document.getElementById('doctor-select');
+            const infoBlock = document.getElementById('doctor-info');
+            const specText = document.getElementById('doctor-spec-text');
+            const selected = select.value;
+
+            if (selected && selected !== 'Любой врач') {
+                infoBlock.style.display = 'block';
+                specText.textContent = doctorsData[selected];
+            } else {
+                infoBlock.style.display = 'none';
+            }
+        }
+
+        // Запускаем при загрузке страницы (если врач уже выбран в ссылке)
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDoctorInfo();
+        });
+    </script>
 </body>
 </html>
