@@ -527,3 +527,15 @@ a {
 .nav a:hover {
     color: #5b9caf;
 }
+
+/* Контейнер для каталога (ограничивает ширину и центрирует) */
+.catalog-section {
+    padding: 60px 0;
+    background: #f8f4ea; /* Такой же фон, как в других блоках */
+}
+
+.container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
