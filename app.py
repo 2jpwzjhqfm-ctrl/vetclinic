@@ -89,6 +89,15 @@ def specialists():
 def appointment():
     service_id = request.args.get("service_id", type=int)
     selected_service = None
+    doctor = request.args.get("doctor", "Любой врач") 
+
+    # Список врачей для выпадающего списка (Имя: Специализация)
+    doctors_list = {
+        "Анна Смирнова": "Терапевт (осмотры, вакцинация, лечение внутренних болезней)",
+        "Иван Петров": "Хирург (плановые и экстренные операции, травматология)",
+        "Елена Козлова": "Дерматолог (кожные заболевания, аллергии)",
+        "Дмитрий Волков": "Стоматолог (гигиена полости рта, лечение зубов)"
+    }
 
     if service_id is not None:
         conn = get_connection()
@@ -96,19 +105,17 @@ def appointment():
             column[0]: row[index]
             for index, column in enumerate(cursor.description)
         }
-
         selected_service = conn.execute("""
-            SELECT id, name, description, price,
-                   duration_minutes, category, image
-            FROM services
-            WHERE id = ? AND is_active = 1
+            SELECT id, name, description, price, duration_minutes, category, image
+            FROM services WHERE id = ? AND is_active = 1
         """, (service_id,)).fetchone()
-
         conn.close()
 
     return render_template(
         "appointment.html",
-        selected_service=selected_service
+        selected_service=selected_service,
+        doctor=doctor,
+        doctors_list=doctors_list # <-- Передаем список врачей в шаблон
     )
 
 
