@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои записи — Happy Pet</title>
+    <link rel="stylesheet" href="/css/specialists.css">
+    <style>
+        .intro { max-width: 1000px; margin: 0 auto; }
+        .table-wrap { overflow-x: auto; margin-top: 30px; background: #fff; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th { background: #1258b8; color: #fff; padding: 12px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        td { padding: 10px; border-bottom: 1px solid #eee; color: #333; vertical-align: top; }
+        tr:hover td { background: #f9f9f9; }
+        .empty { text-align: center; padding: 40px; color: #888; font-style: italic; }
+        .price-cell { font-weight: 600; color: #1258b8; white-space: nowrap; }
+        .muted { color: #999; }
+        .status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; background: #fff3cd; color: #8a7a1f; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="container header-content">
+            <a href="/" class="logo">Happy Pet</a>
+            <nav class="nav">
+                <a href="/">О клинике</a>
+                <a href="/services">Услуги</a>
+                <a href="/specialists">Специалисты</a>
+                <a href="/appointment">Запись</a>
+                <a href="/contacts">Контакты</a>
+                <a href="/my_appointments">Мои записи</a>
+                <a href="/login">Личный кабинет</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-wrapper" style="margin-top: 40px; padding: 0 20px;">
+        <section class="intro" style="padding: 40px;">
+            <p class="section-label" style="text-align: center;">ЛИЧНЫЙ КАБИНЕТ</p>
+            <h2 style="text-align: center;">Мои записи</h2>
+            <p class="intro-text" style="text-align: center;">Здравствуйте, {{ user_name }}! Здесь только ваши записи на приём.</p>
+
+            {% if appointments %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Питомец</th>
+                            <th>Вид/Порода</th>
+                            <th>Причина</th>
+                            <th>Время</th>
+                            <th>Дата</th>
+                            <th>Врач</th>
+                            <th>Услуга</th>
+                            <th>К оплате</th>
+                            <th>Статус</th>
+                            <th>Дата записи</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in appointments %}
+                        <tr>
+                            <td>{{ a.pet_name }}</td>
+                            <td>{{ a.pet_type }}</td>
+                            <td>{{ a.reason or '—' }}</td>
+                            <td style="white-space: nowrap;">{{ a.preferred_time }}</td>
+                            <td style="white-space: nowrap;">{{ a.appointment_date or '—' }}</td>
+                            <td>{{ a.doctor }}</td>
+                            <td>{{ a.service_name or 'Приём' }}</td>
+                            <td class="price-cell">{% if a.final_price %}{{ "%.0f" | format(a.final_price) }} ₽{% else %}<span class="muted">уточняется</span>{% endif %}</td>
+                            <td><span class="status-badge">Ожидает подтверждения</span></td>
+                            <td class="muted" style="white-space: nowrap;">{{ a.created_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty">У вас пока нет записей. <a href="/appointment">Записаться на приём</a>.</p>
+            {% endif %}
+        </section>
+    </main>
+
+</body>
+</html>
