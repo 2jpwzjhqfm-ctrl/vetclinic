@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользователи — Happy Pet</title>
+    <link rel="stylesheet" href="/css/specialists.css">
+    <style>
+        .intro { max-width: 1100px; margin: 0 auto; }
+        .table-wrap { overflow-x: auto; margin-top: 30px; background: #fff; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { background: #1258b8; color: #fff; padding: 12px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        td { padding: 10px; border-bottom: 1px solid #eee; color: #333; vertical-align: top; }
+        tr:hover td { background: #f9f9f9; }
+        .empty { text-align: center; padding: 40px; color: #888; font-style: italic; }
+        .muted { color: #999; }
+        .col-header { text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА АДМИНА -->
+    <header class="header">
+        <div class="container header-content">
+            <a href="/" class="logo">Happy Pet</a>
+            <nav class="nav">
+                <a href="/">На главную</a>
+                <a href="/admin/clients">БД: записи</a>
+                <a href="/admin/users">БД: пользователи</a>
+                <a href="/admin/logout">Выйти</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-wrapper" style="margin-top: 40px; padding: 0 20px;">
+        <section class="intro" style="padding: 40px;">
+            <p class="section-label" style="text-align: center;">АДМИНИСТРИРОВАНИЕ</p>
+            <h2 style="text-align: center;">Зарегистрированные пользователи</h2>
+            <p class="intro-text" style="text-align: center;">Все аккаунты из базы данных клиники. Всего: {{ users|length }}.</p>
+
+            {% if users %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for col in columns %}
+                            <th class="col-header">
+                                {% if col == 'card_number' %}Карта{% elif col == 'visits_count' %}Визитов{% elif col == 'name' %}Имя{% elif col == 'email' %}E-mail{% elif col == 'points' %}Баллы{% elif col == 'id' %}ID{% elif col == 'created_at' %}Дата регистрации{% else %}{{ col }}{% endif %}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            {% for col in columns %}
+                                <td>
+                                    {% if col == 'points' %}
+                                        <b>{{ user[col] }}</b>
+                                    {% elif col == 'visits_count' %}
+                                        {{ user[col] }}
+                                    {% elif col == 'email' %}
+                                        {{ user[col] }}
+                                    {% else %}
+                                        {{ user[col] if user[col] not in [None, ''] else '—' }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty">Зарегистрированных пользователей пока нет.</p>
+            {% endif %}
+        </section>
+    </main>
+
+</body>
+</html>
