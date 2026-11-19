@@ -13,6 +13,7 @@
       <a href="/">Главная</a>
       <a href="/services">Услуги</a>
       <a href="/appointment">Запись</a>
+      <a href="/my_appointments">Мои записи</a>
       <a href="/logout">Выйти</a>
     </nav>
   </header>
@@ -32,6 +33,20 @@
     {% endfor %}
 </section>
 {% endif %}
+{% if upcoming_appointments %}
+<section style="background:#e8f4ff; border:1px solid #1258b8; border-radius:12px; padding:16px; margin-bottom:20px;">
+    <h2>Предстоящие приёмы 🗓</h2>
+    {% for a in upcoming_appointments %}
+        <p>
+            🗓 <b>{{ a["appointment_date"] }}</b> · {{ a["preferred_time"] }} —
+            {{ a["service_name"] or "Приём" }} ({{ a["doctor"] }}),
+            питомец: {{ a["pet_name"] }}
+            — <a href="/my_appointments">мои записи</a>
+        </p>
+    {% endfor %}
+    <p style="margin:0; font-size:13px; color:#555;">Визит появится в «Истории посещений» с датой приёма автоматически.</p>
+</section>
+{% endif %}
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% for category, msg in messages %}
         <div class="acc-flash acc-flash--{{ category }}">{{ msg }}</div>
@@ -43,7 +58,7 @@
         <span class="acc-card-label">Карта лояльности Happy Card</span>
         <span class="acc-badge">{{ level_name }}</span>
       </div>
-      <div class="acc-card-number">{{ card_number }}</div>
+      <div class="acc-card-number">{{ user["name"] }}</div>
       <div class="acc-card-row">
         <div><b>{{ points }}</b> баллов (≈ {{ points_value }} ₽)</div>
         <div><b>{{ discount }}%</b> скидка</div>
@@ -60,7 +75,8 @@
     </section>
 <section class="card">
     <h2>Отметить визит 🐾</h2>
-    <p>Были на приёме? Отметьте визит — начислим баллы и пересчитаем скидку.</p>
+    
+<p>Визиты, сделанные через форму записи на сайте, учитываются автоматически. Здесь можно отметить визит, оплаченный на месте (например, без записи через сайт) — начислим баллы и пересчитаем скидку.</p>
     <form method="post" action="/visit/add">
         <label>
             Услуга
@@ -184,7 +200,6 @@
                       <a class="acc-small-btn"
                          href="{{ url_for('account.pet_diary', pet_id=pet['id']) }}">
                             📖 Дневник питомца
-                      </a>
                       </a>
 
                         <a class="acc-small-btn"
