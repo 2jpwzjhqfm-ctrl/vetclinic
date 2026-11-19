@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход для администратора — Happy Pet</title>
+    <link rel="stylesheet" href="/css/specialists.css">
+    <style>
+        body { background-color: #fffdf5; }
+        .admin-box { max-width: 420px; margin: 80px auto; background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        h1 { font-size: 1.8rem; font-weight: 600; text-align: center; margin-bottom: 10px; color: #333; }
+        .subtitle { color: #777; text-align: center; margin-bottom: 30px; font-size: 14px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #333; }
+        input { width: 100%; padding: 14px; border: 1px solid #e1e1e1; border-radius: 8px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #1258b8; }
+        button { width: 100%; padding: 16px; background: #1258b8; color: #fff; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        button:hover { background: #0e4a9e; }
+        .error { background: #ffebee; color: #d32f2f; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-size: 14px; }
+        .back { text-align: center; margin-top: 16px; font-size: 13px; }
+        .back a { color: #1258b8; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-box">
+        <h1>Вход для сотрудников</h1>
+        <p class="subtitle">Панель администратора клиники Happy Pet</p>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="/admin/login">
+            <label for="login">Логин</label>
+            <input type="text" id="login" name="login" placeholder="admin" required>
+
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required>
+
+            <button type="submit">Войти в панель</button>
+        </form>
+
+        <p class="back"><a href="/">← Вернуться на сайт</a></p>
+    </div>
+
+</body>
+</html>
