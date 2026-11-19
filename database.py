@@ -8,8 +8,31 @@ def get_connection():
     return sqlite3.connect(DATABASE_NAME)
 
 
+def _ensure_columns(conn):
+    """Мягкая миграция: добавляет недостающие колонки в clients,
+    не трогая существующие данные."""
+    cursor = conn.execute("PRAGMA table_info(clients)")
+    existing = {row[1] for row in cursor.fetchall()}
+
+    needed = {
+        "doctor": "TEXT DEFAULT 'Любой врач'",
+        "user_id": "INTEGER",
+        "service_id": "INTEGER",
+        "service_name": "TEXT DEFAULT ''",
+        "price": "REAL DEFAULT 0",
+        "discount_pct": "INTEGER DEFAULT 0",
+        "points_used": "REAL DEFAULT 0",
+        "final_price": "REAL DEFAULT 0",
+        "appointment_date": "TEXT DEFAULT ''",
+    }
+    for name, ddl in needed.items():
+        if name not in existing:
+            conn.execute(f"ALTER TABLE clients ADD COLUMN {name} {ddl}")
+    conn.commit()
+
+
 def init_db():
-    """Создаёт таблицы клиентов, услуг и корзины."""
+    """Создаёт таблицы клиентов и услуг."""
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -23,9 +46,19 @@ def init_db():
             phone TEXT NOT NULL,
             reason TEXT,
             preferred_time TEXT,
+            doctor TEXT DEFAULT 'Любой врач',
+            user_id INTEGER,
+            service_id INTEGER,
+            service_name TEXT DEFAULT '',
+            price REAL DEFAULT 0,
+            discount_pct INTEGER DEFAULT 0,
+            points_used REAL DEFAULT 0,
+            final_price REAL DEFAULT 0,
+            appointment_date TEXT DEFAULT '',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
+    _ensure_columns(conn)
 
     # Таблица услуг
     cursor.execute("""
@@ -40,8 +73,6 @@ def init_db():
             is_active INTEGER DEFAULT 1
         )
     """)
-
-
 
     # Услуги нашей ветеринарной клиники
     services = [
