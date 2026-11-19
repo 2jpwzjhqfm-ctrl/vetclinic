@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Запись на прием — Happy Pet</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         /* --- ЛОКАЛЬНЫЕ СТИЛИ ТОЛЬКО ДЛЯ СТРАНИЦЫ ЗАПИСИ --- */
         body { background-color: #fffdf5; }
@@ -19,10 +19,22 @@
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .btn-primary { width: 100%; padding: 18px; background-color: #1258b8; color: #fff; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3); }
-        
+
         /* Стили для блока специализации */
         #doctor-info { background-color: #e9f2ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1258b8; display: none; }
-        
+
+        /* --- БЛОК ЛОЯЛЬНОСТИ HAPPY CARD --- */
+        .loyalty-box { background: #fffbe6; border: 1px solid #f0e6a8; border-left: 4px solid #e6b800; border-radius: 8px; padding: 18px 20px; margin-bottom: 24px; }
+        .loyalty-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; font-size: 14px; color: #333; }
+        .calc-line { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 15px; color: #333; border-bottom: 1px dashed #eee4b0; }
+        .calc-line:last-child { border-bottom: none; }
+        .calc-line.total { font-size: 18px; font-weight: 700; color: #1258b8; }
+        .points-input-wrap { display: flex; align-items: center; gap: 10px; }
+        .points-input-wrap input { width: 90px; padding: 8px; border: 1px solid #e1d07a; border-radius: 6px; font-size: 15px; text-align: right; }
+        .points-hint { font-size: 12px; color: #8a7a1f; }
+        .guest-note { background-color: #fff3cd; border: 1px solid #ffeeba; border-left: 4px solid #e6b800; border-radius: 8px; padding: 15px 18px; margin-bottom: 24px; font-size: 14px; color: #5c4d00; }
+        .guest-note a { color: #1258b8; font-weight: 600; }
+
         @media (max-width: 600px) {
             .form-row { grid-template-columns: 1fr; }
             .appointment-form-wrapper { padding: 20px; }
@@ -43,6 +55,7 @@
                 <a href="/contacts">Контакты</a>
                 <a href="/register">Регистрация</a>
                 <a href="/login">Личный кабинет</a>
+                <a href="/my_appointments">Мои записи</a>
             </nav>
         </div>
     </header>
@@ -53,18 +66,48 @@
             <h1>Запись на прием</h1>
             <p class="subtitle">Заполните форму, и мы свяжемся с вами для подтверждения времени визита.</p>
 
-            <!-- Блок вывода ошибки (если время занято) -->
+            <!-- Блок вывода ошибок и сообщений -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
-      <div style="color: #d32f2f; background-color: #ffebee; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; border-left: 4px solid #d32f2f;">
+      <div style="color: #d32f2f; background-color: #ffebee; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; border-left: 4px solid {% if category == 'success' %}#2e7d32{% else %}#d32f2f{% endif %};">
         {{ message }}
       </div>
     {% endfor %}
   {% endif %}
 {% endwith %}
-            <form action="/add_client" method="POST">
-                
+
+{% if is_logged_in %}
+            <!-- HAPPY CARD: баланс и скидка вошедшего пользователя -->
+            <div class="loyalty-box">
+                <div class="loyalty-top">
+                    <strong>🐾 Happy Card · {{ loyalty.level_name }}</strong>
+                    <span>Баллы: <b>{{ loyalty.points }}</b> &nbsp;|&nbsp; Скидка: <b>{{ loyalty.discount }}%</b></span>
+                </div>
+                <div class="calc-line"><span>Цена услуги</span><span id="base-price">—</span></div>
+                <div class="calc-line"><span>Скидка {{ loyalty.discount }}%</span><span id="disc-amount">—</span></div>
+                <div class="calc-line">
+                    <span>Списать баллов (1 балл = 1 ₽)<br>
+                        <span class="points-hint">не больше половины чека · доступно {{ loyalty.points }}</span>
+                    </span>
+                    <span class="points-input-wrap">
+                        <input type="number" id="points-input" name="points_to_use" min="0" step="1" value="0">
+                        <span id="points-used-view">0 ₽</span>
+                    </span>
+                </div>
+                <div class="calc-line total"><span>Итого к оплате</span><span id="final-price">—</span></div>
+                <div class="calc-line"><span>Начислим после визита</span><span>+{{ earn_per_visit }} баллов</span></div>
+            </div>
+{% else %}
+            <div class="guest-note">
+                💛 Вы записываетесь как гость. <a href="/login">Войдите в личный кабинет</a> —
+                накопленные баллы Happy Card (1 балл = 1 ₽) и персональную скидку можно будет
+                применить прямо в этой форме.
+            </div>
+{% endif %}
+
+            <form action="/add_client" method="POST" id="appointment-form">
+
                 <!-- ВЫБОР ВРАЧА (Выпадающий список) -->
                 <div class="form-group">
                     <label for="doctor-select">Выберите специалиста</label>
@@ -81,6 +124,20 @@
                     <p style="margin: 0; font-size: 14px; color: #333;">
                         <strong>Специализация:</strong> <span id="doctor-spec-text"></span>
                     </p>
+                </div>
+
+                <!-- ВЫБОР УСЛУГИ -->
+                <div class="form-group">
+                    <label for="service-select">Выберите услугу</label>
+                    <select id="service-select" name="service_id" class="form-control" required onchange="updatePrice()">
+                        <option value="">— Выберите услугу —</option>
+                        {% for s in services %}
+                            <option value="{{ s.id }}" data-price="{{ s.price }}"
+                                {% if selected_service and selected_service.id == s.id %}selected{% endif %}>
+                                {{ s.name }} — {{ s.price }} ₽
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
 
                 <!-- ПОЛЯ ФОРМЫ -->
@@ -110,16 +167,23 @@
                     <textarea id="reason" name="reason" class="form-control" rows="4" placeholder="Кратко опишите состояние питомца..."></textarea>
                 </div>
 
+                <!-- ВЫБОР ДАТЫ ПРИЁМА -->
+                <div class="form-group">
+                    <label for="appointment-date">Дата приёма</label>
+                    <input type="date" id="appointment-date" name="appointment_date"
+                           class="form-control" min="{{ today }}" value="{{ selected_date }}" required>
+                </div>
+
+                <!-- ВЫБОР ВРЕМЕНИ ПРИЁМА -->
                 <div class="form-group">
                     <label for="preferred-time">Предпочтительное время приема</label>
                     <select id="preferred-time" name="preferred_time" class="form-control" required>
-                        <option value="">Выберите время</option>
-                        <option value="09:00-11:00">09:00 - 11:00</option>
-                        <option value="11:00-13:00">11:00 - 13:00</option>
-                        <option value="13:00-15:00">13:00 - 15:00</option>
-                        <option value="15:00-17:00">15:00 - 17:00</option>
-                        <option value="17:00-19:00">17:00 - 19:00</option>
-                        <option value="19:00-21:00">19:00 - 21:00</option>
+                        <option value="">— Выберите время —</option>
+                        <option value="09:00-11:00">09:00–11:00</option>
+                        <option value="11:00-13:00">11:00–13:00</option>
+                        <option value="13:00-15:00">13:00–15:00</option>
+                        <option value="15:00-17:00">15:00–17:00</option>
+                        <option value="17:00-19:00">17:00–19:00</option>
                     </select>
                 </div>
 
@@ -131,15 +195,27 @@
     <!-- Подвал сайта -->
     <footer class="footer">
         <div class="container">
-        </p>&copy; 2026 Happy Pet. Все права защищены.</p>
+            <p>&copy; 2026 Happy Pet. Все права защищены.</p>
         </div>
     </footer>
 
-    <!-- СКРИПТ ДЛЯ ОБНОВЛЕНИЯ ИНФОРМАЦИИ О ВРАЧЕ -->
+    <!-- СКРИПТЫ: информация о враче + живой расчёт цены с баллами и скидкой -->
     <script>
         // Данные о специализациях (передаем из Python в JS)
         const doctorsData = {{ doctors_list | tojson }};
-        
+
+        // Список услуг для расчёта цены
+        const servicesData = {{ services | tojson }};
+
+        // Данные карты лояльности (null у гостя)
+        {% if is_logged_in %}
+        const LOYALTY = { points: {{ loyalty.points }}, discount: {{ loyalty.discount }} };
+        {% else %}
+        const LOYALTY = null;
+        {% endif %}
+
+        const MAX_POINTS_SHARE = {{ max_points_share }};
+
         function updateDoctorInfo() {
             const select = document.getElementById('doctor-select');
             const infoBlock = document.getElementById('doctor-info');
@@ -154,9 +230,52 @@
             }
         }
 
-        // Запускаем при загрузке страницы (если врач уже выбран в ссылке)
+        function updatePrice() {
+            const sel = document.getElementById('service-select');
+            const baseEl = document.getElementById('base-price');
+            const discEl = document.getElementById('disc-amount');
+            const finalEl = document.getElementById('final-price');
+            const pointsInput = document.getElementById('points-input');
+            const pointsView = document.getElementById('points-used-view');
+
+            if (!sel.value) {
+                baseEl.textContent = '—';
+                discEl.textContent = '—';
+                finalEl.textContent = '—';
+                if (pointsView) pointsView.textContent = '0 ₽';
+                return;
+            }
+
+            const price = parseFloat(sel.options[sel.selectedIndex].dataset.price);
+            const discount = LOYALTY ? LOYALTY.discount : 0;
+            const afterDiscount = Math.round(price * (1 - discount / 100) * 100) / 100;
+
+            baseEl.textContent = price.toFixed(2) + ' ₽';
+            discEl.textContent = '−' + (price - afterDiscount).toFixed(2) + ' ₽';
+
+            let pointsUsed = 0;
+            if (LOYALTY) {
+                const maxPoints = Math.floor(Math.min(LOYALTY.points, afterDiscount * MAX_POINTS_SHARE));
+                let requested = parseInt(pointsInput.value || 0, 10);
+                if (isNaN(requested) || requested < 0) requested = 0;
+                pointsUsed = Math.min(requested, maxPoints);
+                pointsInput.value = pointsUsed;
+                pointsInput.max = maxPoints;
+                if (pointsView) pointsView.textContent = pointsUsed + ' ₽';
+            }
+
+            const final = afterDiscount - pointsUsed;
+            finalEl.textContent = final.toFixed(2) + ' ₽';
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             updateDoctorInfo();
+            updatePrice();
+
+            const pointsInput = document.getElementById('points-input');
+            if (pointsInput) {
+                pointsInput.addEventListener('input', updatePrice);
+            }
         });
     </script>
 </body>
