@@ -6,11 +6,15 @@
     <title>Клиенты — Happy Pet</title>
     <link rel="stylesheet" href="/css/specialists.css">
     <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 30px; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        th { background: #1258b8; color: #fff; padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
-        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; color: #333; }
-        tr:hover { background: #f9f9f9; }
+        .intro { max-width: 1100px; margin: 0 auto; }
+        .table-wrap { overflow-x: auto; margin-top: 30px; background: #fff; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { background: #1258b8; color: #fff; padding: 12px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        td { padding: 10px; border-bottom: 1px solid #eee; color: #333; vertical-align: top; }
+        tr:hover td { background: #f9f9f9; }
         .empty { text-align: center; padding: 40px; color: #888; font-style: italic; }
+        .price-cell { font-weight: 600; color: #1258b8; white-space: nowrap; }
+        .muted { color: #999; }
     </style>
 </head>
 <body>
@@ -19,55 +23,64 @@
     <header class="header">
         <div class="container header-content">
             <a href="/" class="logo">Happy Pet</a>
-            <nav class="nav">
-                <a href="/">О клинике</a>
-                <a href="/services">Услуги</a>
-                <a href="/specialists">Специалисты</a>
-                <a href="/appointment">Запись</a>
-                <a href="/contacts">Контакты</a>
-                <a href="/register">Регистрация</a>
-                <a href="/login">Личный кабинет</a>
+                         <nav class="nav">
+                <a href="/">На главную</a>
+                <a href="/admin/clients">БД: записи</a>
+                <a href="/admin/users">БД: пользователи</a>
+                <a href="/admin/logout">Выйти</a>
             </nav>
         </div>
     </header>
 
-    <main class="page-wrapper" style="margin-top: 40px;">
-        <section class="intro" style="padding: 50px;">
+    <main class="page-wrapper" style="margin-top: 40px; padding: 0 20px;">
+        <section class="intro" style="padding: 40px;">
             <p class="section-label" style="text-align: center;">АДМИНИСТРИРОВАНИЕ</p>
             <h2 style="text-align: center;">Список клиентов</h2>
             <p class="intro-text" style="text-align: center;">Все записи, оставленные через форму на сайте.</p>
 
             {% if clients %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Питомец</th>
-                        <th>Вид/Порода</th>
-                        <th>Владелец</th>
-                        <th>Телефон</th>
-                        <th>Причина</th>
-                        <th>Время</th>
-                        <th>Врач</th> <!-- ВОЗВРАЩАЕМ СТОЛБЕЦ -->
-                        <th>Дата записи</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for client in clients %}
-                    <tr>
-                        <td>{{ client[0] }}</td>
-                        <td>{{ client[1] }}</td>
-                        <td>{{ client[2] }}</td>
-                        <td>{{ client[3] }}</td>
-                        <td>{{ client[4] }}</td>
-                        <td>{{ client[5] }}</td>
-                        <td>{{ client[6] }}</td>
-                        <td>{{ client[7] }}</td> <!-- ВОЗВРАЩАЕМ ВРАЧА -->
-                        <td>{{ client[8] }}</td> <!-- ВОЗВРАЩАЕМ ДАТУ -->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Питомец</th>
+                            <th>Вид/Порода</th>
+                            <th>Владелец</th>
+                            <th>Телефон</th>
+                            <th>Причина</th>
+                            <th>Время</th>
+                            <th>Врач</th>
+                            <th>Услуга</th>
+                            <th>Цена</th>
+                            <th>Скидка</th>
+                            <th>Списано баллов</th>
+                            <th>К оплате</th>
+                            <th>Дата записи</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td>{{ client.id }}</td>
+                            <td>{{ client.pet_name }}</td>
+                            <td>{{ client.pet_type }}</td>
+                            <td>{{ client.owner_name }}</td>
+                            <td>{{ client.phone }}</td>
+                            <td>{{ client.reason or '—' }}</td>
+                            <td style="white-space: nowrap;">{{ client.preferred_time }}</td>
+                            <td>{{ client.doctor }}</td>
+                            <td>{{ client.service_name or '—' }}</td>
+                            <td class="price-cell">{% if client.price %}{{ "%.0f" | format(client.price) }} ₽{% else %}<span class="muted">—</span>{% endif %}</td>
+                            <td>{% if client.discount_pct %}{{ client.discount_pct }}%{% else %}<span class="muted">—</span>{% endif %}</td>
+                            <td>{% if client.points_used %}{{ "%.0f" | format(client.points_used) }}{% else %}<span class="muted">—</span>{% endif %}</td>
+                            <td class="price-cell">{% if client.final_price %}{{ "%.0f" | format(client.final_price) }} ₽{% else %}<span class="muted">—</span>{% endif %}</td>
+                            <td class="muted" style="white-space: nowrap;">{{ client.created_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
             <p class="empty">Пока нет ни одной записи. Заполните форму на странице "Запись".</p>
             {% endif %}
